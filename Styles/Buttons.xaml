@@ -1,0 +1,63 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:esoft.App.Styles">
+    <ControlTemplate TargetType="Button" x:Key="StandartButton">
+        <Border x:Name="ButtonBorder" Background="{StaticResource gray_5}" Height="36" CornerRadius="3" Margin="15">
+            <ContentControl Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" FontFamily="{DynamicResource RobotoRegular}" FontSize="14"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource gray_6}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource gray_7}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="true">
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#80d3d3d3"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate TargetType="Button" x:Key="DangerousButton">
+        <Border x:Name="ButtonBorder" Background="{StaticResource red_0}" Height="36" CornerRadius="3" Margin="15">
+            <ContentControl Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" FontFamily="{DynamicResource RobotoRegular}" FontSize="14"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource red_1}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource red_2}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="true">
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#80d3d3d3"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate TargetType="Button" x:Key="PrimaryButton">
+        <Border x:Name="ButtonBorder" Background="{DynamicResource blue_0}" Height="36" CornerRadius="3" Margin="15">
+            <ContentControl Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" FontFamily="{DynamicResource RobotoRegular}" FontSize="14"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource blue_1}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource blue_2}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="true">
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#80d3d3d3"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+</ResourceDictionary>

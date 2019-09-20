@@ -1,0 +1,397 @@
+﻿<Window x:Class="esoft.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:esoft.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1200"
+        ResizeMode="NoResize">
+    <Grid>
+        <Border BorderBrush="Aqua" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal">
+                <TabControl Width="1200" Background="White" BorderThickness="0,1,0,0" BorderBrush="AliceBlue" FontFamily="{StaticResource RobotoRegular}">
+                    <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding client}">
+                        <TabItem.Header>Клиенты</TabItem.Header>
+                        <TabItem.Content>
+                            <DockPanel Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
+                                        <StackPanel Grid.Column="0">
+                                            <ListBox ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
+                                                            <StackPanel Margin="5">
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0}  {1}  {2}">
+                                                                            <Binding Path="FirstName"/>
+                                                                            <Binding Path="MiddleName"/>
+                                                                            <Binding Path="LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=Email}"/>
+                                                                <TextBlock Text="{Binding Path=Phone}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" DataContext="{Binding SelectedClient}">
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="ClientFirstNameTB"  Text="{Binding Path=FirstName, UpdateSourceTrigger=Explicit}" Tag="Фамилия" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="ClientMiddleNameTB" Text="{Binding Path=MiddleName, UpdateSourceTrigger=Explicit}" Tag="Имя" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="ClientLastNameTB" Text="{Binding Path=LastName, UpdateSourceTrigger=Explicit}" Tag="Отчество" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="ClientEmailTB" Text="{Binding Path=Email, UpdateSourceTrigger=Explicit}" Tag="E-Mail (одно из полей обязательно)" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="ClientPhoneTB" Text="{Binding Path=Phone, UpdateSourceTrigger=Explicit}" Tag="Номер телефона +7 (одно из полей обязательно)" Margin="5 0 5 20" Width="500"></TextBox>
+                                    </StackPanel>
+                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedClient}"/>
+                                        <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="ClientFirstNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientMiddleNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientLastNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientEmailTB" Path="Text"/>
+                                                    <Binding ElementName="ClientPhoneTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="ClientFirstNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientMiddleNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientLastNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientEmailTB" Path="Text"/>
+                                                    <Binding ElementName="ClientPhoneTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DockPanel>
+                                </Grid>
+                            </DockPanel>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding agent}">
+                        <TabItem.Header>Риэлторы</TabItem.Header>
+                        <TabItem.Content>
+                            <DockPanel Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
+                                        <StackPanel Grid.Column="0">
+                                            <ListBox ItemsSource="{Binding Agents}" SelectedItem="{Binding SelectedAgent}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
+                                                            <StackPanel Margin="5">
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0}  {1}  {2}">
+                                                                            <Binding Path="FirstName"/>
+                                                                            <Binding Path="MiddleName"/>
+                                                                            <Binding Path="LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=DealShare}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" DataContext="{Binding SelectedAgent}">
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="AgentFirstNameTB"  Text="{Binding Path=FirstName, UpdateSourceTrigger=Explicit}" Tag="Фамилия (обязательно)" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="AgentMiddleNameTB" Text="{Binding Path=MiddleName, UpdateSourceTrigger=Explicit}" Tag="Имя (обязательно)" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="AgentLastNameTB" Text="{Binding Path=LastName, UpdateSourceTrigger=Explicit}" Tag="Отчество (обязательно)" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="AgentDealShareTB" Text="{Binding Path=DealShare, UpdateSourceTrigger=Explicit}" Tag="Доля (0-100%) - 45 по умолчанию" Margin="5 0 5 20" Width="500"></TextBox>
+                                    </StackPanel>
+                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedAgent}"/>
+                                        <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="AgentFirstNameTB" Path="Text"/>
+                                                    <Binding ElementName="AgentMiddleNameTB" Path="Text"/>
+                                                    <Binding ElementName="AgentLastNameTB" Path="Text"/>
+                                                    <Binding ElementName="AgentDealShareTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="AgentFirstNameTB" Path="Text"/>
+                                                    <Binding ElementName="AgentMiddleNameTB" Path="Text"/>
+                                                    <Binding ElementName="AgentLastNameTB" Path="Text"/>
+                                                    <Binding ElementName="AgentDealShareTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DockPanel>
+                                </Grid>
+                            </DockPanel>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding estate}">
+                        <TabItem.Header>Недвижимость</TabItem.Header>
+                        <TabItem.Content>
+                            <DockPanel Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
+                                        <StackPanel Grid.Column="0" Grid.Row="0">
+                                            <ListBox ItemsSource="{Binding FilteredEstates}" SelectedItem="{Binding SelectedEstate}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
+                                                            <StackPanel Margin="5">
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}г. {0},  ул. {1}, д. {2}, кв. {3}">
+                                                                            <Binding Path="City"/>
+                                                                            <Binding Path="Street"/>
+                                                                            <Binding Path="HouseNumber"/>
+                                                                            <Binding Path="ApartmentNumber"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}Широта: {0}, Долгота: {1}">
+                                                                            <Binding Path="Latitude"/>
+                                                                            <Binding Path="Longitude"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="1">
+                                        <ComboBox Name="EstateFilterCB" Height="36" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0">
+                                            <TextBlock>Все</TextBlock>
+                                            <TextBlock>Квартиры</TextBlock>
+                                            <TextBlock>Дома</TextBlock>
+                                            <TextBlock>Земля</TextBlock>
+                                        </ComboBox>
+                                        <TextBox Name="EstateFilterTB" Template="{StaticResource StandartTextBox}" Tag="Фильтр" Width="300" />
+                                        <Button Template="{StaticResource StandartButton}" Content="Применить" Width="150" Command="{Binding AcceptFilterCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="EstateFilterCB" Path="SelectedIndex"/>
+                                                    <Binding ElementName="EstateFilterTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                    <StackPanel Name="EstateContentRight" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" DataContext="{Binding SelectedEstate}">
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Height="570" CanContentScroll="True">
+                                            <StackPanel>
+                                                <Label FontSize="16" FontFamily="{StaticResource RobotoMedium}" Content="Адрес"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateCityTB"  Text="{Binding City, UpdateSourceTrigger=Explicit}" Tag="Город" Margin="5 0 5 20" Width="500"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateStreetTB" Text="{Binding Street, UpdateSourceTrigger=Explicit}" Tag="Улица" Margin="5 0 5 20" Width="500"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateNumberTB" Text="{Binding HouseNumber, UpdateSourceTrigger=Explicit}" Tag="Номер дома" Margin="5 0 5 20" Width="500"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateApartmentTB" Text="{Binding ApartmentNumber, UpdateSourceTrigger=Explicit}" Tag="Номер квартиры" Margin="5 0 5 20" Width="500"/>
+                                                <Label FontSize="16" FontFamily="{StaticResource RobotoMedium}" Content="Координаты"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateLatitudeTB"  Text="{Binding Latitude, UpdateSourceTrigger=Explicit}" Tag="Широта (не может быть указано только одно из значений)" Margin="5 0 5 20" Width="500"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateLongitudeTB"  Text="{Binding Longitude, UpdateSourceTrigger=Explicit}" Tag="Долгота (не может быть указано только одно из значений)" Margin="5 0 5 20" Width="500"/>
+                                                <Label FontSize="16" FontFamily="{StaticResource RobotoMedium}" Content="Дополнительно"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="EstateAreaTB"  Text="{Binding Area, UpdateSourceTrigger=Explicit}" Tag="Площадь (кв. м)" Margin="5 0 5 20" Width="500"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TabControl x:Name="TypesOfEstate" Width="400" Background="White" BorderThickness="0,1,0,0" BorderBrush="AliceBlue" FontFamily="{StaticResource RobotoRegular}" SelectedIndex="{Binding Path=EstateTypeID}">
+                                                        <TabItem Template="{StaticResource NavigationTabItem}">
+                                                            <TabItem.Header>Квартира</TabItem.Header>
+                                                            <TabItem.Content>
+                                                                <StackPanel>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="ApartmentFloorTB"  Text="{Binding Floor, UpdateSourceTrigger=Explicit}" Tag="Этаж" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="ApartmentRoomsTB" Text="{Binding RoomsApartment, UpdateSourceTrigger=Explicit}" Tag="Количество комнат" Margin="5 0 5 20"/>
+                                                                </StackPanel>
+                                                            </TabItem.Content>
+                                                        </TabItem>
+                                                        <TabItem Template="{StaticResource NavigationTabItem}">
+                                                            <TabItem.Header>Дом</TabItem.Header>
+                                                            <TabItem.Content>
+                                                                <StackPanel>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="HouseFloorsTB"  Text="{Binding Floors, UpdateSourceTrigger=Explicit}" Tag="Этажность дома" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="HouseRoomsTB" Text="{Binding RoomsHouse, UpdateSourceTrigger=Explicit}" Tag="Количество комнат" Margin="5 0 5 20"/>
+                                                                </StackPanel>
+                                                            </TabItem.Content>
+                                                        </TabItem>
+                                                        <TabItem Template="{StaticResource NavigationTabItem}">
+                                                            <TabItem.Header>Земля</TabItem.Header>
+                                                            <TabItem.Content>
+                                                                <StackPanel>
+                                                                </StackPanel>
+                                                            </TabItem.Content>
+                                                        </TabItem>
+                                                    </TabControl>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                            <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedEstate}"/>
+                                            <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
+                                                <Button.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="EstateCityTB" Path="Text"/>
+                                                    <Binding ElementName="EstateStreetTB" Path="Text"/>
+                                                    <Binding ElementName="EstateNumberTB" Path="Text"/>
+                                                    <Binding ElementName="EstateApartmentTB" Path="Text"/>
+
+                                                    <Binding ElementName="EstateLatitudeTB" Path="Text"/>
+                                                    <Binding ElementName="EstateLongitudeTB" Path="Text"/>
+
+                                                    <Binding ElementName="EstateAreaTB" Path="Text"/>
+
+                                                    <Binding ElementName="TypesOfEstate" Path="SelectedIndex"/>
+
+                                                    <Binding ElementName="ApartmentFloorTB" Path="Text"/>
+                                                    <Binding ElementName="ApartmentRoomsTB" Path="Text"/>
+
+                                                    <Binding ElementName="HouseFloorsTB" Path="Text"/>
+                                                    <Binding ElementName="HouseRoomsTB" Path="Text"/>
+                                                </MultiBinding>
+                                                </Button.CommandParameter>
+                                            </Button>
+                                            <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
+                                                <Button.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource createConverter}">
+                                                        <Binding ElementName="EstateCityTB" Path="Text"/>
+                                                        <Binding ElementName="EstateStreetTB" Path="Text"/>
+                                                        <Binding ElementName="EstateNumberTB" Path="Text"/>
+                                                        <Binding ElementName="EstateApartmentTB" Path="Text"/>
+
+                                                        <Binding ElementName="EstateLatitudeTB" Path="Text"/>
+                                                        <Binding ElementName="EstateLongitudeTB" Path="Text"/>
+
+                                                        <Binding ElementName="EstateAreaTB" Path="Text"/>
+
+                                                        <Binding ElementName="TypesOfEstate" Path="SelectedIndex"/>
+
+                                                        <Binding ElementName="ApartmentFloorTB" Path="Text"/>
+                                                        <Binding ElementName="ApartmentRoomsTB" Path="Text"/>
+
+                                                        <Binding ElementName="HouseFloorsTB" Path="Text"/>
+                                                        <Binding ElementName="HouseRoomsTB" Path="Text"/>
+                                                </MultiBinding>
+                                                </Button.CommandParameter>
+                                            </Button>
+                                        </DockPanel>
+                                </Grid>
+                            </DockPanel>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem Template="{StaticResource NavigationTabItem}">
+                        <TabItem.Header>Предложение</TabItem.Header>
+                        <TabItem.Content>
+                            <DockPanel Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
+                                        <StackPanel Grid.Column="0">
+                                            <ListBox ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
+                                                            <StackPanel Margin="5">
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0}  {1}  {2}">
+                                                                            <Binding Path="FirstName"/>
+                                                                            <Binding Path="MiddleName"/>
+                                                                            <Binding Path="LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=Email}"/>
+                                                                <TextBlock Text="{Binding Path=Phone}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" DataContext="{Binding SelectedClient}">
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="OfferFirstNameTB"  Text="{Binding Path=FirstName, UpdateSourceTrigger=Explicit}" Tag="Фамилия" Margin="5 0 5 20" Width="500"></TextBox>
+                                    </StackPanel>
+                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedClient}"/>
+                                        <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="ClientFirstNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientMiddleNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientLastNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientEmailTB" Path="Text"/>
+                                                    <Binding ElementName="ClientPhoneTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="ClientFirstNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientMiddleNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientLastNameTB" Path="Text"/>
+                                                    <Binding ElementName="ClientEmailTB" Path="Text"/>
+                                                    <Binding ElementName="ClientPhoneTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DockPanel>
+                                </Grid>
+                            </DockPanel>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem Template="{StaticResource NavigationTabItem}">
+                        <TabItem.Header>Потребность</TabItem.Header>
+                        <TabItem.Content>Список потребностей</TabItem.Content>
+                    </TabItem>
+                </TabControl>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

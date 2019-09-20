@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:esoft.Styles"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <SolidColorBrush x:Key="blue_0" Color="#04A0FF"></SolidColorBrush>
+    <SolidColorBrush x:Key="blue_1" Color="#0091EA"></SolidColorBrush>
+    <SolidColorBrush x:Key="blue_2" Color="#0081D1"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="red_0" Color="#FF4A6D"></SolidColorBrush>
+    <SolidColorBrush x:Key="red_1" Color="#FF1744"></SolidColorBrush>
+    <SolidColorBrush x:Key="red_2" Color="#E3002C"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="gray_0" Color="#F7F9F9"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_1" Color="#ECEFF1"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_2" Color="#CFD8DC"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_3" Color="#B0BEC5"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_4" Color="#78909C"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_5" Color="#546E7A"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_6" Color="#37474F"></SolidColorBrush>
+    <SolidColorBrush x:Key="gray_7" Color="#263238"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="text_primary" Color="#37474F"></SolidColorBrush>
+    <SolidColorBrush x:Key="text_paragraph" Color="#546E7A"></SolidColorBrush>
+    <SolidColorBrush x:Key="text_secondary" Color="#78909C"></SolidColorBrush>
+    <SolidColorBrush x:Key="text_tetriary" Color="#B0BEC5"></SolidColorBrush>
+
+
+</ResourceDictionary>
