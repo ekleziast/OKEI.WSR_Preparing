@@ -18,7 +18,7 @@ namespace esoft.Entity
         // Клиент, создавший запрос на продажу
         [ForeignKey("Client")]
         public int ClientID { get; set; }
-        public virtual Person Client { get; set; }
+        public virtual Client Client { get; set; }
 
         // Риэлтор, занимающийся этой заявкой
         [ForeignKey("Agent")]

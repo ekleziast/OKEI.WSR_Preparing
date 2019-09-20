@@ -115,17 +115,24 @@
     <Compile Include="Migrations\201909180853045_Estate1.Designer.cs">
       <DependentUpon>201909180853045_Estate1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909200624320_Offer.cs" />
+    <Compile Include="Migrations\201909200624320_Offer.Designer.cs">
+      <DependentUpon>201909200624320_Offer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ModelView\OfferModelView.cs" />
     <Compile Include="Model\ApartmentModel.cs" />
     <Compile Include="ModelView\ClientModelView.cs" />
     <Compile Include="ModelView\AgentModelView.cs" />
     <Compile Include="ModelView\EstateModelView.cs" />
     <Compile Include="Model\AgentModel.cs" />
+    <Compile Include="Model\Checkers.cs" />
     <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Model\EstateModel.cs" />
     <Compile Include="Model\HouseModel.cs" />
     <Compile Include="Model\LandModel.cs" />
     <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\OfferModel.cs" />
     <Compile Include="Model\PersonModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
@@ -228,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909180853045_Estate1.resx">
       <DependentUpon>201909180853045_Estate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909200624320_Offer.resx">
+      <DependentUpon>201909200624320_Offer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

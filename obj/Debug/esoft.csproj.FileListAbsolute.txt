@@ -40,3 +40,4 @@ C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.estateIntToS
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.HouseApartment.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.Type.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.Estate1.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.Offer.resources

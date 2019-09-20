@@ -27,7 +27,7 @@
                                     </Grid.RowDefinitions>
                                     <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
                                         <StackPanel Grid.Column="0">
-                                            <ListBox ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                            <ListBox x:Name="ClientsCollection" ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
@@ -101,7 +101,7 @@
                                     </Grid.RowDefinitions>
                                     <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
                                         <StackPanel Grid.Column="0">
-                                            <ListBox ItemsSource="{Binding Agents}" SelectedItem="{Binding SelectedAgent}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                            <ListBox x:Name="AgentsCollection" ItemsSource="{Binding Agents}" SelectedItem="{Binding SelectedAgent}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
@@ -171,7 +171,7 @@
                                     </Grid.RowDefinitions>
                                     <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
                                         <StackPanel Grid.Column="0" Grid.Row="0">
-                                            <ListBox ItemsSource="{Binding FilteredEstates}" SelectedItem="{Binding SelectedEstate}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                            <ListBox x:Name="EstatesCollection" ItemsSource="{Binding FilteredEstates}" SelectedItem="{Binding SelectedEstate}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
@@ -202,7 +202,7 @@
                                         </StackPanel>
                                     </Border>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="1">
-                                        <ComboBox Name="EstateFilterCB" Height="36" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0">
+                                        <ComboBox Name="EstateFilterCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0">
                                             <TextBlock>Все</TextBlock>
                                             <TextBlock>Квартиры</TextBlock>
                                             <TextBlock>Дома</TextBlock>
@@ -316,7 +316,7 @@
                             </DockPanel>
                         </TabItem.Content>
                     </TabItem>
-                    <TabItem Template="{StaticResource NavigationTabItem}">
+                    <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding offer}">
                         <TabItem.Header>Предложение</TabItem.Header>
                         <TabItem.Content>
                             <DockPanel Margin="10">
@@ -331,22 +331,40 @@
                                     </Grid.RowDefinitions>
                                     <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
                                         <StackPanel Grid.Column="0">
-                                            <ListBox ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                            <ListBox x:Name="OffersCollection" ItemsSource="{Binding Offers}" SelectedItem="{Binding SelectedOffer}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
                                                             <StackPanel Margin="5">
                                                                 <TextBlock>
                                                                     <TextBlock.Text>
-                                                                        <MultiBinding StringFormat="{}{0}  {1}  {2}">
-                                                                            <Binding Path="FirstName"/>
-                                                                            <Binding Path="MiddleName"/>
-                                                                            <Binding Path="LastName"/>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="Client.FirstName"/>
+                                                                            <Binding Path="Client.MiddleName"/>
+                                                                            <Binding Path="Client.LastName"/>
                                                                         </MultiBinding>
                                                                     </TextBlock.Text>
                                                                 </TextBlock>
-                                                                <TextBlock Text="{Binding Path=Email}"/>
-                                                                <TextBlock Text="{Binding Path=Phone}"/>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="Agent.FirstName"/>
+                                                                            <Binding Path="Agent.MiddleName"/>
+                                                                            <Binding Path="Agent.LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}г. {0},  ул. {1}, д. {2}, кв. {3}">
+                                                                            <Binding Path="Estate.City"/>
+                                                                            <Binding Path="Estate.Street"/>
+                                                                            <Binding Path="Estate.HouseNumber"/>
+                                                                            <Binding Path="Estate.ApartmentNumber"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=Price}"/>
                                                             </StackPanel>
                                                         </Border>
                                                     </DataTemplate>
@@ -354,30 +372,83 @@
                                             </ListBox>
                                         </StackPanel>
                                     </Border>
-                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" DataContext="{Binding SelectedClient}">
-                                        <TextBox Template="{StaticResource StandartTextBox}" Name="OfferFirstNameTB"  Text="{Binding Path=FirstName, UpdateSourceTrigger=Explicit}" Tag="Фамилия" Margin="5 0 5 20" Width="500"></TextBox>
+                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" >
+                                        <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Клиент" Margin="0 0 0 10"/>
+                                        <ComboBox x:Name="OfferClientsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedClientOffer, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Path=Clients}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                    <Binding Path="FirstName"/>
+                                                                    <Binding Path="MiddleName"/>
+                                                                    <Binding Path="LastName"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Агент" Margin="0 0 0 10"/>
+                                        <ComboBox x:Name="OfferAgentsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Agent, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding ElementName=AgentsCollection, Path=Items}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                    <Binding Path="FirstName"/>
+                                                                    <Binding Path="MiddleName"/>
+                                                                    <Binding Path="LastName"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Объект недвижимости" Margin="0 0 0 10"/>
+                                        <ComboBox x:Name="OfferEstatesCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Estate, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding ElementName=EstatesCollection, Path=Items}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}г. {0},  ул. {1}, д. {2}, кв. {3}">
+                                                                    <Binding Path="City"/>
+                                                                    <Binding Path="Street"/>
+                                                                    <Binding Path="HouseNumber"/>
+                                                                    <Binding Path="ApartmentNumber"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="OfferPriceTB"  Text="{Binding Path=Price, UpdateSourceTrigger=Explicit}" Tag="Цена" Margin="5 0 5 20" Width="500"></TextBox>
                                     </StackPanel>
                                     <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
-                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedClient}"/>
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedOffer}"/>
                                         <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
                                             <Button.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource createConverter}">
-                                                    <Binding ElementName="ClientFirstNameTB" Path="Text"/>
-                                                    <Binding ElementName="ClientMiddleNameTB" Path="Text"/>
-                                                    <Binding ElementName="ClientLastNameTB" Path="Text"/>
-                                                    <Binding ElementName="ClientEmailTB" Path="Text"/>
-                                                    <Binding ElementName="ClientPhoneTB" Path="Text"/>
+                                                    <Binding ElementName="OfferClientsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="OfferAgentsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="OfferEstatesCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="OfferPriceTB" Path="Text"/>
                                                 </MultiBinding>
                                             </Button.CommandParameter>
                                         </Button>
                                         <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
                                             <Button.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource createConverter}">
-                                                    <Binding ElementName="ClientFirstNameTB" Path="Text"/>
-                                                    <Binding ElementName="ClientMiddleNameTB" Path="Text"/>
-                                                    <Binding ElementName="ClientLastNameTB" Path="Text"/>
-                                                    <Binding ElementName="ClientEmailTB" Path="Text"/>
-                                                    <Binding ElementName="ClientPhoneTB" Path="Text"/>
+                                                    <Binding ElementName="OfferClientsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="OfferAgentsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="OfferEstatesCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="OfferPriceTB" Path="Text"/>
                                                 </MultiBinding>
                                             </Button.CommandParameter>
                                         </Button>

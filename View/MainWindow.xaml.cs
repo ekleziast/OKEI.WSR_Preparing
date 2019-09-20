@@ -14,7 +14,8 @@ namespace esoft.View
             InitializeComponent();
             DataContext = new {
                 agent = new AgentModelView(), client = new ClientModelView(),
-                estate = new EstateModelView() };
+                estate = new EstateModelView(),
+                offer = new OfferModelView()};
         }
     }
 }

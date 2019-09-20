@@ -109,7 +109,7 @@ namespace esoft.ModelView
                     var longitude = (string)values[5];
                     var area = (string)values[6];
 
-                    return IsDouble(area) && (IsDouble(latitude, -80, 80) && IsDouble(longitude, -180, 180)) &&
+                    return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80) && Model.Checkers.IsDouble(longitude, -180, 180)) &&
                     (String.IsNullOrWhiteSpace(latitude) == String.IsNullOrWhiteSpace(longitude));
                 });
             }
@@ -137,7 +137,7 @@ namespace esoft.ModelView
                         var longitude = (string)values[5];
                         var area = (string)values[6];
 
-                        return IsDouble(area) && (IsDouble(latitude, -80, 80) && IsDouble(longitude, -180, 180)) &&
+                        return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80) && Model.Checkers.IsDouble(longitude, -180, 180)) &&
                         (String.IsNullOrWhiteSpace(latitude) == String.IsNullOrWhiteSpace(longitude));
                     }
                     else
@@ -234,71 +234,11 @@ namespace esoft.ModelView
 
             return estate;
         }
-        private bool IsDouble(string d)
-        {
-            double result;
-            d = d.Replace('.', ',');
-            bool isDouble = Double.TryParse(d, out result);
-            return isDouble ? !(result < 0) : false || String.IsNullOrWhiteSpace(d);
-        }
-        private bool IsDouble(string d, int minLim, int maxLim)
-        {
-            double result;
-            d = d.Replace('.', ',');
-            bool isDouble = Double.TryParse(d, out result);
-            return isDouble ? !(result < minLim || result > maxLim) : false || String.IsNullOrWhiteSpace(d);
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-        private string ConvertType(string type)
-        {
-            string result = "";
-            switch (type)
-            {
-                case "Все":
-                    result = "";
-                    break;
-                case "Квартиры":
-                    result = "Apartment";
-                    break;
-                case "Дома":
-                    result = "House";
-                    break;
-                case "Земля":
-                    result = "Land";
-                    break;
-                case "Apartment":
-                    result = "Квартира";
-                    break;
-                case "House":
-                    result = "Дом";
-                    break;
-                case "Land":
-                    result = "Земля";
-                    break;
-            }
-            return result;
-        }
-        private int ConvertTypeToInt(string type)
-        {
-            int result = 0;
-            switch (type)
-            {
-                case "Apartment":
-                    result = 0;
-                    break;
-                case "House":
-                    result = 1;
-                    break;
-                case "Land":
-                    result = 2;
-                    break;
-            }
-            return result;
         }
     }
 }
