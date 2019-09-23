@@ -47,7 +47,7 @@ namespace esoft.ModelView
                     Client client = new Client { Phone = phone, Email = email, FirstName = firstName, MiddleName = middleName, LastName = lastName, ID = SelectedClient.ID };
                     
                     Model.Model.Save(client);
-                    
+
                     Clients.Remove(SelectedClient);
                     Clients.Insert(0, client);
                     SelectedClient = Clients[0];

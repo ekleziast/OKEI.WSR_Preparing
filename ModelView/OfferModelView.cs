@@ -21,9 +21,12 @@ namespace esoft.ModelView
         public Offer SelectedOffer { get => selectedOffer;
             set {
                 selectedOffer = value;
-                SelectedClientOffer = selectedOffer.Client;
-                SelectedAgentOffer = selectedOffer.Agent;
-                SelectedEstateOffer = selectedOffer.Estate;
+                if (selectedOffer != null)
+                {
+                    SelectedClientOffer = selectedOffer.Client;
+                    SelectedAgentOffer = selectedOffer.Agent;
+                    SelectedEstateOffer = selectedOffer.Estate;
+                }
                 OnPropertyChanged("SelectedOffer");
             }
         }
@@ -109,8 +112,37 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
+                    var values = (object[])parameter;
+                    Client client = (Client)values[0];
+                    Agent agent = (Agent)values[1];
+                    Estate estate = (Estate)values[2];
+                    var price = (string)values[3];
 
-                }, (obj) => false);
+                    Offer offer = new Offer { ClientID = client.ID, AgentID = agent.ID, EstateID = estate.ID,
+                        Client = client, Agent = agent, Estate = estate,
+                        Price = Convert.ToInt32(price), ID = SelectedOffer.ID };
+                    Model.Model.Save(offer);
+
+                    Offers.Remove(SelectedOffer);
+                    Offers.Insert(0, offer);
+                    SelectedOffer = Offers[0];
+                }, (obj) => {
+                    if(SelectedOffer != null)
+                    {
+                        var values = (object[])obj;
+                        Client client = (Client)values[0];
+                        Agent agent = (Agent)values[1];
+                        Estate estate = (Estate)values[2];
+                        var price = (string)values[3];
+
+                        return (client != null) && (agent != null) && (estate != null)
+                        && (Model.Checkers.IsUInt(price) && !String.IsNullOrWhiteSpace(price) );
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
             }
         }
         public RelayCommand RemoveCommand
@@ -131,7 +163,7 @@ namespace esoft.ModelView
             using (Context db = new Context())
             {
                 offers = new ObservableCollection<Offer> { };
-                var result = db.Offers.Where(c => !c.isDeleted && !c.isCompleted);
+                var result = db.Offers.Include("Client").Include("Agent").Include("Estate").Where(c => !c.isDeleted && !c.isCompleted);
                 foreach (var c in result)
                 {
                     offers.Add(c);
