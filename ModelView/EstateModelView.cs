@@ -29,26 +29,9 @@ namespace esoft.ModelView
         }
         public EstateModelView()
         {
-            try
-            {
-                using (Context db = new Context())
-                {
-                    Estates = new ObservableCollection<Estate> { };
-                    FilteredEstates = new ObservableCollection<Estate> { };
-                    var result = db.Estates.Where(c => !c.isDeleted);
-
-                    foreach (var c in result)
-                    {
-                        Estates.Add(c);
-                    }
-                    AcceptFilter();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return;
-            }
+            Estates = CreateCollection();
+            FilteredEstates = CreateCollection();
+            AcceptFilter();
         }
         public RelayCommand AcceptFilterCommand
         {
@@ -233,6 +216,20 @@ namespace esoft.ModelView
             }
 
             return estate;
+        }
+        public static ObservableCollection<Estate> CreateCollection()
+        {
+            ObservableCollection<Estate> estates = new ObservableCollection<Estate> { };
+            using (Context db = new Context())
+            {
+                estates = new ObservableCollection<Estate> { };
+                var result = db.Estates.Where(c => !c.isDeleted);
+                foreach (var c in result)
+                {
+                    estates.Add(c);
+                }
+            }
+            return estates;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

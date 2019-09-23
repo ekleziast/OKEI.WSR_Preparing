@@ -392,7 +392,7 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                         <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Агент" Margin="0 0 0 10"/>
-                                        <ComboBox x:Name="OfferAgentsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Agent, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding ElementName=AgentsCollection, Path=Items}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                        <ComboBox x:Name="OfferAgentsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedAgentOffer, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Agents}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
@@ -410,7 +410,7 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                         <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Объект недвижимости" Margin="0 0 0 10"/>
-                                        <ComboBox x:Name="OfferEstatesCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Estate, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding ElementName=EstatesCollection, Path=Items}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                        <ComboBox x:Name="OfferEstatesCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedEstateOffer, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Estates}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
@@ -428,7 +428,7 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                        <TextBox Template="{StaticResource StandartTextBox}" Name="OfferPriceTB"  Text="{Binding Path=Price, UpdateSourceTrigger=Explicit}" Tag="Цена" Margin="5 0 5 20" Width="500"></TextBox>
+                                        <TextBox Template="{StaticResource StandartTextBox}" Name="OfferPriceTB"  Text="{Binding Path=SelectedOffer.Price, UpdateSourceTrigger=Explicit}" Tag="Цена" Margin="5 0 5 20" Width="500"></TextBox>
                                     </StackPanel>
                                     <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
                                         <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedOffer}"/>

@@ -28,24 +28,7 @@ namespace esoft.ModelView
 
         public ClientModelView()
         {
-            try
-            {
-                using (Context db = new Context())
-                {
-                    Clients = new ObservableCollection<Client> { };
-                    var result = db.Clients.Where(c => !c.isDeleted);
-
-                    foreach (var c in result)
-                    {
-                        Clients.Add(c);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return;
-            }
+            Clients = CreateCollection();
         }
         
         public RelayCommand SaveCommand
@@ -150,6 +133,21 @@ namespace esoft.ModelView
         private bool IsValidPhone(string phone)
         {
             return Regex.Match(phone, @"^(\+[0-9]{11})$").Success;
+        }
+
+        public static ObservableCollection<Client> CreateCollection()
+        {
+            ObservableCollection<Client> clients = new ObservableCollection<Client> { };
+            using (Context db = new Context())
+            {
+                clients = new ObservableCollection<Client> { };
+                var result = db.Clients.Where(c => !c.isDeleted);
+                foreach (var c in result)
+                {
+                    clients.Add(c);
+                }
+            }
+            return clients;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

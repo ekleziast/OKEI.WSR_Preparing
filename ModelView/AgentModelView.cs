@@ -25,24 +25,7 @@ namespace esoft.ModelView
 
         public AgentModelView()
         {
-            try
-            {
-                using (Context db = new Context())
-                {
-                    Agents = new ObservableCollection<Agent> { };
-                    var result = db.Agents.Where(c => !c.isDeleted);
-
-                    foreach (var a in result)
-                    {
-                        Agents.Add(a);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return;
-            }
+                Agents = CreateCollection();
         }
 
         public RelayCommand SaveCommand
@@ -135,7 +118,20 @@ namespace esoft.ModelView
             bool isInt = Int32.TryParse(dealShare, out result);
             return isInt ? !(result > 100 || result < 0) : false || String.IsNullOrWhiteSpace(dealShare);
         }
-
+        public static ObservableCollection<Agent> CreateCollection()
+        {
+            ObservableCollection<Agent> agents = new ObservableCollection<Agent> { };
+            using (Context db = new Context())
+            {
+                agents = new ObservableCollection<Agent> { };
+                var result = db.Agents.Where(c => !c.isDeleted);
+                foreach (var c in result)
+                {
+                    agents.Add(c);
+                }
+            }
+            return agents;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

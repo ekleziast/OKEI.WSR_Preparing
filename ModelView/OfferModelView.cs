@@ -1,12 +1,9 @@
 ﻿using esoft.Entity;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace esoft.ModelView
 {
@@ -15,30 +12,45 @@ namespace esoft.ModelView
         //TODO: SelectedAgent, SelectedEstate, Updating
         private Offer selectedOffer;
         private Client selectedClientOffer;
+        private Estate selectedEstateOffer;
+        private Agent selectedAgentOffer;
+
         public Client SelectedClientOffer { get => selectedClientOffer; set { selectedClientOffer = value; OnPropertyChanged("SelectedClientOffer"); } }
-        public Offer SelectedOffer { get => selectedOffer; set { selectedOffer = value; SelectedClientOffer = selectedOffer.Client; OnPropertyChanged("SelectedOffer"); } }
+        public Agent SelectedAgentOffer { get => selectedAgentOffer; set { selectedAgentOffer = value; OnPropertyChanged("SelectedAgentOffer"); } }
+        public Estate SelectedEstateOffer { get => selectedEstateOffer; set { selectedEstateOffer = value; OnPropertyChanged("SelectedEstateOffer"); } }
+        public Offer SelectedOffer { get => selectedOffer;
+            set {
+                selectedOffer = value;
+                SelectedClientOffer = selectedOffer.Client;
+                SelectedAgentOffer = selectedOffer.Agent;
+                SelectedEstateOffer = selectedOffer.Estate;
+                OnPropertyChanged("SelectedOffer");
+            }
+        }
+        
 
         public ObservableCollection<Client> Clients { get; set; }
         public ObservableCollection<Agent> Agents { get; set; }
+        public ObservableCollection<Estate> Estates { get; set; }
         public ObservableCollection<Offer> Offers { get; set; }
         public OfferModelView()
         {
             try
             {
-                using(Context db = new Context())
+                using (Context db = new Context())
                 {
-                    Offers = new ObservableCollection<Offer> { };
-                    Clients = new ObservableCollection<Client> { };
                     Agents = new ObservableCollection<Agent> { };
+                    Clients = new ObservableCollection<Client> { };
+                    Estates = new ObservableCollection<Estate> { };
+                    Offers = new ObservableCollection<Offer> { };
 
-                    var result = db.Offers.Include("Estate").Where(o => !o.isDeleted && !o.isCompleted);
-                    foreach(var o in result)
+                    var resultEstates = db.Estates.Where(c => !c.isDeleted);
+                    foreach (var c in resultEstates)
                     {
-                        Offers.Add(o);
+                        Estates.Add(c);
                     }
 
                     var resultClients = db.Clients.Where(c => !c.isDeleted);
-
                     foreach (var c in resultClients)
                     {
                         Clients.Add(c);
@@ -48,6 +60,12 @@ namespace esoft.ModelView
                     foreach (var c in resultAgents)
                     {
                         Agents.Add(c);
+                    }
+
+                    var result = db.Offers.Where(o => !o.isDeleted && !o.isCompleted);
+                    foreach (var o in result)
+                    {
+                        Offers.Add(o);
                     }
                 }
             }
@@ -106,6 +124,20 @@ namespace esoft.ModelView
                     Offers.Remove(offer);
                 }, (obj) => SelectedOffer != null);
             }
+        }
+        public static ObservableCollection<Offer> CreateCollection()
+        {
+            ObservableCollection<Offer> offers = new ObservableCollection<Offer> { };
+            using (Context db = new Context())
+            {
+                offers = new ObservableCollection<Offer> { };
+                var result = db.Offers.Where(c => !c.isDeleted && !c.isCompleted);
+                foreach (var c in result)
+                {
+                    offers.Add(c);
+                }
+            }
+            return offers;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
