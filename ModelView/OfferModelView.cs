@@ -9,7 +9,6 @@ namespace esoft.ModelView
 {
     class OfferModelView : INotifyPropertyChanged
     {
-        //TODO: SelectedAgent, SelectedEstate, Updating
         private Offer selectedOffer;
         private Client selectedClientOffer;
         private Estate selectedEstateOffer;

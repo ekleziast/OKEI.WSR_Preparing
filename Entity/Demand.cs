@@ -9,14 +9,6 @@ namespace esoft.Entity
     {
         [Key]
         public int ID { get; set; }
-        public int? MinPrice { get; set; }
-        public int? MaxPrice { get; set; }
-        public int? MinArea { get; set; }
-        public int? MaxArea { get; set; }
-
-        [ForeignKey("Estate")]
-        public int EstateID { get; set; }
-        public virtual Estate Estate { get; set; }
 
         [ForeignKey("DemandFilter")]
         public int? DemandFilterID { get; set; }
@@ -31,6 +23,8 @@ namespace esoft.Entity
         [ForeignKey("Agent")]
         public int AgentID { get; set; }
         public virtual Agent Agent { get; set; }
+
+        public int? EstateTypeID { get; set; }
 
         public bool isCompleted { get; set; }
         public bool isDeleted { get; set; }

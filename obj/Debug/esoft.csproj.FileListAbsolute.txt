@@ -41,3 +41,8 @@ C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.HouseApartme
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.Type.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.Estate1.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.Offer.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandFilter.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandEstate.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandEstateTypeID.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandFilterPriceAndArea.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.IntToDoubleInDemandFilter.resources

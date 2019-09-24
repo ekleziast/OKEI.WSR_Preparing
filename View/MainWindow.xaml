@@ -13,7 +13,7 @@
             <StackPanel Orientation="Horizontal">
                 <TabControl Width="1200" Background="White" BorderThickness="0,1,0,0" BorderBrush="AliceBlue" FontFamily="{StaticResource RobotoRegular}">
                     <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding client}">
-                        <TabItem.Header>Клиенты</TabItem.Header>
+                        <TabItem.Header>Клиент</TabItem.Header>
                         <TabItem.Content>
                             <DockPanel Margin="10">
                                 <Grid>
@@ -87,7 +87,7 @@
                         </TabItem.Content>
                     </TabItem>
                     <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding agent}">
-                        <TabItem.Header>Риэлторы</TabItem.Header>
+                        <TabItem.Header>Риэлтор</TabItem.Header>
                         <TabItem.Content>
                             <DockPanel Margin="10">
                                 <Grid>
@@ -449,6 +449,187 @@
                                                     <Binding ElementName="OfferAgentsCB" Path="SelectedItem"/>
                                                     <Binding ElementName="OfferEstatesCB" Path="SelectedItem"/>
                                                     <Binding ElementName="OfferPriceTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DockPanel>
+                                </Grid>
+                            </DockPanel>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding demand}">
+                        <TabItem.Header>Потребность</TabItem.Header>
+                        <TabItem.Content>
+                            <DockPanel Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
+                                        <StackPanel Grid.Column="0">
+                                            <ListBox x:Name="DemandsCollection" ItemsSource="{Binding Demands}" SelectedItem="{Binding SelectedDemand}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
+                                                            <StackPanel Margin="5">
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="Client.FirstName"/>
+                                                                            <Binding Path="Client.MiddleName"/>
+                                                                            <Binding Path="Client.LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="Agent.FirstName"/>
+                                                                            <Binding Path="Agent.MiddleName"/>
+                                                                            <Binding Path="Agent.LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=DemandFilter.MinPrice, StringFormat=Минимальная  цена {0} руб.}"/>
+                                                                <TextBlock Text="{Binding Path=DemandFilter.MaxPrice, StringFormat=Максимальная цена {0} руб.}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" >
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Height="570" CanContentScroll="True">
+                                            <StackPanel>
+                                                <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Клиент" Margin="0 0 0 10"/>
+                                                <ComboBox x:Name="DemandClientsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedClientDemand, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Path=Clients}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="FirstName"/>
+                                                                            <Binding Path="MiddleName"/>
+                                                                            <Binding Path="LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Агент" Margin="0 0 0 10"/>
+                                                <ComboBox x:Name="DemandAgentsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedAgentDemand, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Agents}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="FirstName"/>
+                                                                            <Binding Path="MiddleName"/>
+                                                                            <Binding Path="LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <TextBox Template="{StaticResource StandartTextBox}" Name="DemandMinPriceTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MinPrice, UpdateSourceTrigger=Explicit}" Tag="Минимальная цена" Margin="5 0 5 20" Width="500"></TextBox>
+                                                <TextBox Template="{StaticResource StandartTextBox}" Name="DemandMaxPriceTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MaxPrice, UpdateSourceTrigger=Explicit}" Tag="Максимальная цена" Margin="5 0 5 20" Width="500"></TextBox>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandMinAreaTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MinArea, UpdateSourceTrigger=Explicit}" Tag="Минимальная площадь" Margin="5 0 5 20"/>
+                                                <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandMaxAreaTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MaxArea, UpdateSourceTrigger=Explicit}" Tag="Максимальная площадь" Margin="5 0 5 20"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TabControl x:Name="DemandTypesOfEstate" Width="400" Background="White" BorderThickness="0,1,0,0" BorderBrush="AliceBlue" FontFamily="{StaticResource RobotoRegular}" SelectedIndex="{Binding Path=SelectedDemand.EstateTypeID}">
+                                                        <TabItem Template="{StaticResource NavigationTabItem}">
+                                                            <TabItem.Header>Квартира</TabItem.Header>
+                                                            <TabItem.Content>
+                                                                <StackPanel>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandApartmentMinRoomsTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MinRooms, UpdateSourceTrigger=Explicit}" Tag="Минимальное количество комнат" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandApartmentMaxRoomsTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MaxRooms, UpdateSourceTrigger=Explicit}" Tag="Максимальное количество комнат" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandApartmentMinFloorTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MinFloor, UpdateSourceTrigger=Explicit}" Tag="Минимальный этаж" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandApartmentMaxFloorTB" Text="{Binding Path=SelectedDemand.DemandFilter.MaxFloor, UpdateSourceTrigger=Explicit}" Tag="Максимальный этаж" Margin="5 0 5 20"/>
+                                                                </StackPanel>
+                                                            </TabItem.Content>
+                                                        </TabItem>
+                                                        <TabItem Template="{StaticResource NavigationTabItem}">
+                                                            <TabItem.Header>Дом</TabItem.Header>
+                                                            <TabItem.Content>
+                                                                <StackPanel>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandHouseMinRoomsTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MinRooms, UpdateSourceTrigger=Explicit}" Tag="Минимальное количество комнат" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandHouseMaxRoomsTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MaxRooms, UpdateSourceTrigger=Explicit}" Tag="Максимальное количество комнат" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandHouseMinFloorsTB"  Text="{Binding Path=SelectedDemand.DemandFilter.MinFloors, UpdateSourceTrigger=Explicit}" Tag="Минимальное количество этажей" Margin="5 0 5 20"/>
+                                                                    <TextBox Template="{StaticResource StandartTextBox}" x:Name="DemandHouseMaxFloorsTB" Text="{Binding Path=SelectedDemand.DemandFilter.MaxFloors, UpdateSourceTrigger=Explicit}" Tag="Максимальное количество этажей" Margin="5 0 5 20"/>
+                                                                </StackPanel>
+                                                            </TabItem.Content>
+                                                        </TabItem>
+                                                        <TabItem Template="{StaticResource NavigationTabItem}">
+                                                            <TabItem.Header>Земля</TabItem.Header>
+                                                            <TabItem.Content>
+                                                                <StackPanel>
+                                                                </StackPanel>
+                                                            </TabItem.Content>
+                                                        </TabItem>
+                                                    </TabControl>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedDemand}"/>
+                                        <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="DemandClientsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="DemandAgentsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="DemandMinPriceTB" Path="Text"/>
+                                                    <Binding ElementName="DemandMaxPriceTB" Path="Text"/>
+                                                    <Binding ElementName="DemandMinAreaTB" Path="Text"/>
+                                                    <Binding ElementName="DemandMaxAreaTB" Path="Text"/>
+
+                                                    <Binding ElementName="DemandTypesOfEstate" Path="SelectedIndex"/>
+                                                    
+                                                    <Binding ElementName="DemandApartmentMinRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandApartmentMaxRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandApartmentMinFloorTB" Path="Text"/>
+                                                    <Binding ElementName="DemandApartmentMaxFloorTB" Path="Text"/>
+
+                                                    <Binding ElementName="DemandHouseMinRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandHouseMaxRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandHouseMinFloorsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandHouseMaxFloorsTB" Path="Text"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="DemandClientsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="DemandAgentsCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="DemandMinPriceTB" Path="Text"/>
+                                                    <Binding ElementName="DemandMaxPriceTB" Path="Text"/>
+                                                    <Binding ElementName="DemandMinAreaTB" Path="Text"/>
+                                                    <Binding ElementName="DemandMaxAreaTB" Path="Text"/>
+
+                                                    <Binding ElementName="DemandTypesOfEstate" Path="SelectedIndex"/>
+
+                                                    <Binding ElementName="DemandApartmentMinRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandApartmentMaxRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandApartmentMinFloorTB" Path="Text"/>
+                                                    <Binding ElementName="DemandApartmentMaxFloorTB" Path="Text"/>
+
+                                                    <Binding ElementName="DemandHouseMinRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandHouseMaxRoomsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandHouseMinFloorsTB" Path="Text"/>
+                                                    <Binding ElementName="DemandHouseMaxFloorsTB" Path="Text"/>
                                                 </MultiBinding>
                                             </Button.CommandParameter>
                                         </Button>
