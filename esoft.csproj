@@ -139,7 +139,20 @@
     <Compile Include="Migrations\201909241016509_IntToDoubleInDemandFilter.Designer.cs">
       <DependentUpon>201909241016509_IntToDoubleInDemandFilter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909251014517_isDeletedDeal.cs" />
+    <Compile Include="Migrations\201909251014517_isDeletedDeal.Designer.cs">
+      <DependentUpon>201909251014517_isDeletedDeal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909251106055_notNullEstateType.cs" />
+    <Compile Include="Migrations\201909251106055_notNullEstateType.Designer.cs">
+      <DependentUpon>201909251106055_notNullEstateType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909251135189_stringToInt.cs" />
+    <Compile Include="Migrations\201909251135189_stringToInt.Designer.cs">
+      <DependentUpon>201909251135189_stringToInt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ModelView\DealModelView.cs" />
     <Compile Include="ModelView\DemandModelView.cs" />
     <Compile Include="ModelView\OfferModelView.cs" />
     <Compile Include="ModelView\ClientModelView.cs" />
@@ -266,6 +279,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909241016509_IntToDoubleInDemandFilter.resx">
       <DependentUpon>201909241016509_IntToDoubleInDemandFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909251014517_isDeletedDeal.resx">
+      <DependentUpon>201909251014517_isDeletedDeal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909251106055_notNullEstateType.resx">
+      <DependentUpon>201909251106055_notNullEstateType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909251135189_stringToInt.resx">
+      <DependentUpon>201909251135189_stringToInt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

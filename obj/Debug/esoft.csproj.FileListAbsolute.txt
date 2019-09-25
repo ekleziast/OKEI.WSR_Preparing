@@ -46,3 +46,6 @@ C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandEstate
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandEstateTypeID.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.DemandFilterPriceAndArea.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.IntToDoubleInDemandFilter.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.isDeletedDeal.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.notNullEstateType.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.stringToInt.resources

@@ -7,7 +7,7 @@ namespace esoft.Entity
     [Table("House")]
     public class House : Estate
     {
-        public string Floors { get; set; }
-        public string RoomsHouse { get; set; }
+        public int? Floors { get; set; }
+        public int? RoomsHouse { get; set; }
     }
 }

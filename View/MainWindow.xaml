@@ -638,9 +638,126 @@
                             </DockPanel>
                         </TabItem.Content>
                     </TabItem>
+                    <TabItem Template="{StaticResource NavigationTabItem}" DataContext="{Binding deal}">
+                        <TabItem.Header>Сделка</TabItem.Header>
+                        <TabItem.Content>
+                            <DockPanel Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="LightGray" BorderThickness="0 0 1 0">
+                                        <StackPanel Grid.Column="0">
+                                            <ListBox x:Name="DealsCollection" ItemsSource="{Binding Deals}" SelectedItem="{Binding SelectedDeal}" Height="635" BorderThickness="0" Width="587" FontFamily="{StaticResource RobotoRegular}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="LightSkyBlue" BorderThickness="0, 0.5, 0, 0.5" CornerRadius="3" Width="578">
+                                                            <StackPanel Margin="5">
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="Client.FirstName"/>
+                                                                            <Binding Path="Client.MiddleName"/>
+                                                                            <Binding Path="Client.LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                            <Binding Path="Agent.FirstName"/>
+                                                                            <Binding Path="Agent.MiddleName"/>
+                                                                            <Binding Path="Agent.LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}г. {0},  ул. {1}, д. {2}, кв. {3}">
+                                                                            <Binding Path="Estate.City"/>
+                                                                            <Binding Path="Estate.Street"/>
+                                                                            <Binding Path="Estate.HouseNumber"/>
+                                                                            <Binding Path="Estate.ApartmentNumber"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=Price}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 20" >
+                                        <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Потребность" Margin="0 0 0 10"/>
+                                        <ComboBox x:Name="DealDemandsCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedDealDemand, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Path=DemandsInDeal}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                    <Binding Path="FirstName"/>
+                                                                    <Binding Path="MiddleName"/>
+                                                                    <Binding Path="LastName"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBlock FontSize="16" FontFamily="{StaticResource RobotoRegular}" Text="Предложение" Margin="0 0 0 10"/>
+                                        <ComboBox x:Name="DealOffersCB" Background="White" BorderBrush="{StaticResource gray_3}" Height="36" Width="500" Margin="5 0 5 20" FontFamily="{StaticResource RobotoRegular}" FontSize="16" SelectedItem="{Binding Path=SelectedDealOffer, UpdateSourceTrigger=Explicit}" ItemsSource="{Binding Path=OffersInDeal}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} {1} {2} ">
+                                                                    <Binding Path="FirstName"/>
+                                                                    <Binding Path="MiddleName"/>
+                                                                    <Binding Path="LastName"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedOffer}"/>
+                                        <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="DealOffersCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="DealDemandsCB" Path="SelectedItem"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource createConverter}">
+                                                    <Binding ElementName="DealOffersCB" Path="SelectedItem"/>
+                                                    <Binding ElementName="DealDemandsCB" Path="SelectedItem"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DockPanel>
+                                </Grid>
+                            </DockPanel>
+                        </TabItem.Content>
+                    </TabItem>
                     <TabItem Template="{StaticResource NavigationTabItem}">
-                        <TabItem.Header>Потребность</TabItem.Header>
-                        <TabItem.Content>Список потребностей</TabItem.Content>
+                        <TabItem.Header>Сделка</TabItem.Header>
+                        <TabItem.Content>Список сделок</TabItem.Content>
                     </TabItem>
                 </TabControl>
             </StackPanel>

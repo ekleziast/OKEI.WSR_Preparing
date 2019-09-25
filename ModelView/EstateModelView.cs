@@ -87,13 +87,7 @@ namespace esoft.ModelView
 
                     AcceptFilter(filterString, typeFilter);
                 }, (obj) => {
-                    var values = (object[])obj;
-                    var latitude = (string)values[4];
-                    var longitude = (string)values[5];
-                    var area = (string)values[6];
-
-                    return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80) && Model.Checkers.IsDouble(longitude, -180, 180)) &&
-                    (String.IsNullOrWhiteSpace(latitude) == String.IsNullOrWhiteSpace(longitude));
+                    return ValidateValues(obj);
                 });
             }
         }
@@ -113,16 +107,9 @@ namespace esoft.ModelView
 
                     AcceptFilter(filterString, typeFilter);
                 }, (obj) => {
-                    var values = (object[])obj;
                     if (SelectedEstate != null)
                     {
-                        var latitude = (string)values[4];
-                        var longitude = (string)values[5];
-                        var area = (string)values[6];
-
-                        return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80) 
-                        && Model.Checkers.IsDouble(longitude, -180, 180)) &&
-                        (String.IsNullOrWhiteSpace(latitude) == String.IsNullOrWhiteSpace(longitude));
+                        return ValidateValues(obj);
                     }
                     else
                     {
@@ -130,6 +117,21 @@ namespace esoft.ModelView
                     }
                 });
             }
+        }
+        private bool ValidateValues(object parameter)
+        {
+            var values = (object[])parameter;
+            var latitude = (string)values[4];
+            var longitude = (string)values[5];
+            var area = (string)values[6];
+
+            return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80)
+            && Model.Checkers.IsDouble(longitude, -180, 180)) &&
+            (String.IsNullOrWhiteSpace(latitude) == String.IsNullOrWhiteSpace(longitude))
+            && Model.Checkers.IsUInt((string)values[8])
+            && Model.Checkers.IsUInt((string)values[9])
+            && Model.Checkers.IsUInt((string)values[10])
+            && Model.Checkers.IsUInt((string)values[11]);
         }
         public RelayCommand RemoveCommand
         {
@@ -168,8 +170,16 @@ namespace esoft.ModelView
             switch (typeInd)
             {
                 case 0:
-                    var floor = (string)values[8];
-                    var roomsApartment = (string)values[9];
+                    int? floor = null;
+                    int? roomsApartment = null;
+                    if (String.IsNullOrWhiteSpace((string)values[8]) != true)
+                    {
+                        floor = Convert.ToInt32(values[8]);
+                    }
+                    if (String.IsNullOrWhiteSpace((string)values[9]) != true)
+                    {
+                        roomsApartment = Convert.ToInt32(values[9]);
+                    }
                     estate = new Apartment
                     {
                         City = city,
@@ -185,8 +195,15 @@ namespace esoft.ModelView
                     };
                     break;
                 case 1:
-                    var floors = (string)values[10];
-                    var roomsHouse = (string)values[11];
+                    int? floors = null;
+                    int? roomsHouse = null;
+                    if (String.IsNullOrWhiteSpace((string)values[10]) != true) {
+                    floors = Convert.ToInt32(values[10]);
+                    }
+                    if (String.IsNullOrWhiteSpace((string)values[11]) != true)
+                    {
+                        roomsHouse = Convert.ToInt32(values[11]);
+                    }
                     estate = new House
                     {
                         City = city,

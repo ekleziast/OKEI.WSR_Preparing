@@ -17,5 +17,7 @@ namespace esoft.Entity
         [ForeignKey("Demand")]
         public int? DemandID { get; set; }
         public virtual Demand Demand { get; set; }
+
+        public bool isDeleted { get; set; }
     }
 }

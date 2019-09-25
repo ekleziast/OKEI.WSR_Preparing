@@ -21,7 +21,7 @@ namespace esoft.Entity
         // Долгота
         public double? Longitude { get; set; }
         
-        public int? EstateTypeID { get; set; }
+        public int EstateTypeID { get; set; }
 
         public bool isDeleted { get; set; }
     }
