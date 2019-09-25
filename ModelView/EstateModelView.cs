@@ -120,7 +120,8 @@ namespace esoft.ModelView
                         var longitude = (string)values[5];
                         var area = (string)values[6];
 
-                        return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80) && Model.Checkers.IsDouble(longitude, -180, 180)) &&
+                        return Model.Checkers.IsDouble(area) && (Model.Checkers.IsDouble(latitude, -80, 80) 
+                        && Model.Checkers.IsDouble(longitude, -180, 180)) &&
                         (String.IsNullOrWhiteSpace(latitude) == String.IsNullOrWhiteSpace(longitude));
                     }
                     else

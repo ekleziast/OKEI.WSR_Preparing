@@ -36,7 +36,6 @@ namespace esoft.ModelView
 
         public DemandModelView()
         {
-            Demands = CreateCollection();
             using(Context db = new Context())
             {
                 Agents = new ObservableCollection<Agent> { };
@@ -79,11 +78,30 @@ namespace esoft.ModelView
                 {
                     Demand demand = GetDemand(parameter);
                     Model.Model.Create(demand);
-                    Model.Model.Create(demand.DemandFilter);
                     Demands.Insert(0, demand);
                     SelectedDemand = Demands[0];
                 }, (obj) => {
-                    return true;
+                    var values = (object[])obj;
+                    return 
+                    ((Client) values[0] != null) 
+                    && ((Agent)values[1] != null)
+                    && (values[6] != null)
+                    && (Model.Checkers.IsUInt((string)values[2]))
+                    && (Model.Checkers.IsUInt((string)values[3]))
+                    && (Model.Checkers.IsDouble((string)values[4]))
+                    && (Model.Checkers.IsDouble((string)values[5]))
+                    && (Model.Checkers.IsUInt((string)values[2]))
+                    && (Model.Checkers.IsUInt((string)values[3]))
+                    && (Model.Checkers.IsDouble((string)values[4]))
+                    && (Model.Checkers.IsDouble((string)values[5]))
+                    && (Model.Checkers.IsUInt((string)values[7]))
+                    && (Model.Checkers.IsUInt((string)values[8]))
+                    && (Model.Checkers.IsUInt((string)values[9]))
+                    && (Model.Checkers.IsUInt((string)values[10]))
+                    && (Model.Checkers.IsUInt((string)values[11]))
+                    && (Model.Checkers.IsUInt((string)values[12]))
+                    && (Model.Checkers.IsUInt((string)values[13]))
+                    && (Model.Checkers.IsUInt((string)values[14]));
                 });
             }
         }
@@ -100,6 +118,7 @@ namespace esoft.ModelView
 
         private Demand GetDemand(object parameter)
         {
+            //TODO: Проверки на добавление
             var values = (object[])parameter;
             Client client = (Client)values[0];
             Agent agent = (Agent)values[1];
@@ -108,28 +127,27 @@ namespace esoft.ModelView
             double? minArea = null;
             double? maxArea = null;
 
-
-            if (Model.Checkers.IsUInt((string)values[2]))
+            if (!String.IsNullOrWhiteSpace((string)values[2]))
             {
                 minPrice = Convert.ToInt32(values[2]);
             }
-            if (Model.Checkers.IsUInt((string)values[3]))
+            if (!String.IsNullOrWhiteSpace((string)values[3]))
             {
                 maxPrice = Convert.ToInt32(values[3]);
             }
-            if (Model.Checkers.IsDouble((string)values[4]))
+            if (!String.IsNullOrWhiteSpace((string)values[4]))
             {
-                minArea = Convert.ToDouble(values[4]);
+                minArea = Convert.ToDouble(((string)values[4]).Replace('.', ','));
             }
-            if (Model.Checkers.IsDouble((string)values[5]))
+            if (!String.IsNullOrWhiteSpace((string)values[5]))
             {
-                maxArea = Convert.ToDouble(values[5]);
+                maxArea = Convert.ToDouble(((string)values[5]).Replace('.', ','));
             }
 
             int typeId = Convert.ToInt32(values[6]);
 
             DemandFilter demandFilter = new DemandFilter();
-
+            
             switch (typeId)
             {
                 case 0:
@@ -138,19 +156,19 @@ namespace esoft.ModelView
                     int? minFloorApartment = null;
                     int? maxFloorApartment = null;
 
-                    if (Model.Checkers.IsUInt((string)values[7]))
+                    if (!String.IsNullOrWhiteSpace((string)values[7]))
                     {
                         minRoomsApartment = Convert.ToInt32(values[7]);
                     }
-                    if (Model.Checkers.IsUInt((string)values[8]))
+                    if (!String.IsNullOrWhiteSpace((string)values[8]))
                     {
                         maxRoomsApartment = Convert.ToInt32(values[8]);
                     }
-                    if (Model.Checkers.IsUInt((string)values[9]))
+                    if (!String.IsNullOrWhiteSpace((string)values[9]))
                     {
                         minFloorApartment = Convert.ToInt32(values[9]);
                     }
-                    if (Model.Checkers.IsUInt((string)values[10]))
+                    if (!String.IsNullOrWhiteSpace((string)values[10]))
                     {
                         maxFloorApartment = Convert.ToInt32(values[10]);
                     }
@@ -168,19 +186,19 @@ namespace esoft.ModelView
                     int? minFloorsHouse = null;
                     int? maxFloorsHouse = null;
 
-                    if (Model.Checkers.IsUInt((string)values[11]))
+                    if (!String.IsNullOrWhiteSpace((string)values[11]))
                     {
                         minRoomsHouse = Convert.ToInt32(values[11]);
                     }
-                    if (Model.Checkers.IsUInt((string)values[12]))
+                    if (!String.IsNullOrWhiteSpace((string)values[12]))
                     {
                         maxRoomsHouse = Convert.ToInt32(values[12]);
                     }
-                    if (Model.Checkers.IsUInt((string)values[13]))
+                    if (!String.IsNullOrWhiteSpace((string)values[13]))
                     {
                         minFloorsHouse = Convert.ToInt32(values[13]);
                     }
-                    if (Model.Checkers.IsUInt((string)values[14]))
+                    if (!String.IsNullOrWhiteSpace((string)values[14]))
                     {
                         maxFloorsHouse = Convert.ToInt32(values[14]);
                     }
