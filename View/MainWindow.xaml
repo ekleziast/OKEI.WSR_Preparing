@@ -660,33 +660,41 @@
                                                             <StackPanel Margin="5">
                                                                 <TextBlock>
                                                                     <TextBlock.Text>
-                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
-                                                                            <Binding Path="Client.FirstName"/>
-                                                                            <Binding Path="Client.MiddleName"/>
-                                                                            <Binding Path="Client.LastName"/>
+                                                                        <MultiBinding StringFormat="Покупатель: {0} {1} {2} ">
+                                                                            <Binding Path="Demand.Client.FirstName"/>
+                                                                            <Binding Path="Demand.Client.MiddleName"/>
+                                                                            <Binding Path="Demand.Client.LastName"/>
                                                                         </MultiBinding>
                                                                     </TextBlock.Text>
                                                                 </TextBlock>
                                                                 <TextBlock>
                                                                     <TextBlock.Text>
-                                                                        <MultiBinding StringFormat="{}{0} {1} {2} ">
-                                                                            <Binding Path="Agent.FirstName"/>
-                                                                            <Binding Path="Agent.MiddleName"/>
-                                                                            <Binding Path="Agent.LastName"/>
+                                                                        <MultiBinding StringFormat="Агент: {0} {1} {2} ">
+                                                                            <Binding Path="Demand.Agent.FirstName"/>
+                                                                            <Binding Path="Demand.Agent.MiddleName"/>
+                                                                            <Binding Path="Demand.Agent.LastName"/>
                                                                         </MultiBinding>
                                                                     </TextBlock.Text>
                                                                 </TextBlock>
                                                                 <TextBlock>
                                                                     <TextBlock.Text>
-                                                                        <MultiBinding StringFormat="{}г. {0},  ул. {1}, д. {2}, кв. {3}">
-                                                                            <Binding Path="Estate.City"/>
-                                                                            <Binding Path="Estate.Street"/>
-                                                                            <Binding Path="Estate.HouseNumber"/>
-                                                                            <Binding Path="Estate.ApartmentNumber"/>
+                                                                        <MultiBinding StringFormat="Продавец: {0} {1} {2} ">
+                                                                            <Binding Path="Offer.Client.FirstName"/>
+                                                                            <Binding Path="Offer.Client.MiddleName"/>
+                                                                            <Binding Path="Offer.Client.LastName"/>
                                                                         </MultiBinding>
                                                                     </TextBlock.Text>
                                                                 </TextBlock>
-                                                                <TextBlock Text="{Binding Path=Price}"/>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="Агент: {0} {1} {2} ">
+                                                                            <Binding Path="Offer.Agent.FirstName"/>
+                                                                            <Binding Path="Offer.Agent.MiddleName"/>
+                                                                            <Binding Path="Offer.Agent.LastName"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding Path=Offer.Price}"/>
                                                             </StackPanel>
                                                         </Border>
                                                     </DataTemplate>
@@ -703,9 +711,9 @@
                                                         <TextBlock>
                                                             <TextBlock.Text>
                                                                 <MultiBinding StringFormat="{}{0} {1} {2} ">
-                                                                    <Binding Path="FirstName"/>
-                                                                    <Binding Path="MiddleName"/>
-                                                                    <Binding Path="LastName"/>
+                                                                    <Binding Path="Client.FirstName"/>
+                                                                    <Binding Path="Client.MiddleName"/>
+                                                                    <Binding Path="Client.LastName"/>
                                                                 </MultiBinding>
                                                             </TextBlock.Text>
                                                         </TextBlock>
@@ -721,9 +729,9 @@
                                                         <TextBlock>
                                                             <TextBlock.Text>
                                                                 <MultiBinding StringFormat="{}{0} {1} {2} ">
-                                                                    <Binding Path="FirstName"/>
-                                                                    <Binding Path="MiddleName"/>
-                                                                    <Binding Path="LastName"/>
+                                                                    <Binding Path="Client.FirstName"/>
+                                                                    <Binding Path="Client.MiddleName"/>
+                                                                    <Binding Path="Client.LastName"/>
                                                                 </MultiBinding>
                                                             </TextBlock.Text>
                                                         </TextBlock>

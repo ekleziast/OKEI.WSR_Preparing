@@ -26,17 +26,25 @@ namespace esoft.ModelView
                 OnPropertyChanged("SelectedDeal");
             }
         }
+        private Demand selectedDemandDeal;
+        public Demand SelectedDemandDeal
+        {
+            get => selectedDemandDeal;
+            set {
+                selectedDemandDeal = value;
+                if (selectedDemandDeal != null)
+                {
+                    OffersInDeal = GetFilteredOffers(SelectedDemandDeal);
+                }
+                OnPropertyChanged("SelectedDemandDeal");
+            }
+        }
+
         private Offer selectedOfferDeal;
         public Offer SelectedOfferDeal
         {
             get => selectedOfferDeal;
             set { selectedOfferDeal = value; OnPropertyChanged("SelectedOfferDeal"); }
-        }
-        private Demand selectedDemandDeal;
-        public Demand SelectedDemandDeal
-        {
-            get => selectedDemandDeal;
-            set { selectedDemandDeal = value; OnPropertyChanged("SelectedDemandDeal"); }
         }
         public ObservableCollection<Deal> Deals { get; set; }
         public ObservableCollection<Offer> OffersInDeal { get; set; }
@@ -44,7 +52,28 @@ namespace esoft.ModelView
 
         public DealModelView()
         {
-            Deals = CreateCollection();
+            using(Context db = new Context())
+            {
+                OffersInDeal = new ObservableCollection<Offer> { };
+                DemandsInDeal = new ObservableCollection<Demand> { };
+                Deals = new ObservableCollection<Deal> { };
+
+                var resultDemands = db.Demands.Include("Client").Include("Agent").Include("DemandFilter").Where(o => !o.isCompleted && !o.isDeleted);
+                foreach(var r in resultDemands)
+                {
+                    DemandsInDeal.Add(r);
+                }
+                var resultOffers = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted && !o.isDeleted);
+                foreach (var r in resultOffers)
+                {
+                    OffersInDeal.Add(r);
+                }
+                var result = db.Deals.Where(o => !o.isDeleted);
+                foreach (var r in result)
+                {
+                    Deals.Add(r);
+                }
+            }
         }
 
         public static ObservableCollection<Deal> CreateCollection()
@@ -65,7 +94,11 @@ namespace esoft.ModelView
             ObservableCollection<Offer> offers = new ObservableCollection<Offer> { };
             using(Context db = new Context())
             {
-                var result = db.Offers.Where(o => !o.isCompleted != true && IsOfferMatchConditions(demand, o));
+                var result = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted != true && IsOfferMatchConditions(demand, o));
+                foreach(var r in result)
+                {
+                    offers.Add(r);
+                }
             }
             return offers;
         }
@@ -90,18 +123,38 @@ namespace esoft.ModelView
                 switch (type) {
                     case 0:
                         Apartment apartment = db.Apartments.Where(o => offer.EstateID == o.ID).FirstOrDefault();
-                        if(demand.DemandFilter.MinFloor != null) { result = result & (apartment.Floor >= demand.DemandFilter.MinFloor); }
-                        if (demand.DemandFilter.MaxFloor != null) { result = result & (apartment.Floor <= demand.DemandFilter.MaxFloor); }
+
+                        if (apartment.Floor != null)
+                        {
+                            if (demand.DemandFilter.MinFloor != null) { result = result && (apartment.Floor >= demand.DemandFilter.MinFloor); }
+                            if (demand.DemandFilter.MaxFloor != null) { result = result && (apartment.Floor <= demand.DemandFilter.MaxFloor); }
+                        }
+                        if(apartment.RoomsApartment != null)
+                        {
+                            if (demand.DemandFilter.MinRooms != null) { result = result && (apartment.RoomsApartment >= demand.DemandFilter.MinRooms); }
+                            if (demand.DemandFilter.MaxRooms != null) { result = result && (apartment.RoomsApartment <= demand.DemandFilter.MaxRooms); }
+                        }
                         break;
                     case 1:
                         House house = db.Houses.Where(o => offer.EstateID == o.ID).FirstOrDefault();
+
+                        if(house.Floors != null)
+                        {
+                            if (demand.DemandFilter.MinFloors != null) { result = result && (house.Floors >= demand.DemandFilter.MinFloors); }
+                            if (demand.DemandFilter.MaxFloors != null) { result = result && (house.Floors <= demand.DemandFilter.MaxFloors); }
+                        }
+                        if(house.RoomsHouse != null)
+                        {
+                            if (demand.DemandFilter.MinRooms != null) { result = result && (house.RoomsHouse >= demand.DemandFilter.MinRooms); }
+                            if (demand.DemandFilter.MaxRooms != null) { result = result && (house.RoomsHouse <= demand.DemandFilter.MaxRooms); }
+                        }
                         break;
                     case 2:
                         Land land = db.Lands.Where(o => offer.EstateID == o.ID).FirstOrDefault();
                         break;
             }
             }
-            return true;
+            return result;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
