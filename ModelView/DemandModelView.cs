@@ -81,27 +81,7 @@ namespace esoft.ModelView
                     Demands.Insert(0, demand);
                     SelectedDemand = Demands[0];
                 }, (obj) => {
-                    var values = (object[])obj;
-                    return 
-                    ((Client) values[0] != null) 
-                    && ((Agent)values[1] != null)
-                    && (values[6] != null)
-                    && (Model.Checkers.IsUInt((string)values[2]))
-                    && (Model.Checkers.IsUInt((string)values[3]))
-                    && (Model.Checkers.IsDouble((string)values[4]))
-                    && (Model.Checkers.IsDouble((string)values[5]))
-                    && (Model.Checkers.IsUInt((string)values[2]))
-                    && (Model.Checkers.IsUInt((string)values[3]))
-                    && (Model.Checkers.IsDouble((string)values[4]))
-                    && (Model.Checkers.IsDouble((string)values[5]))
-                    && (Model.Checkers.IsUInt((string)values[7]))
-                    && (Model.Checkers.IsUInt((string)values[8]))
-                    && (Model.Checkers.IsUInt((string)values[9]))
-                    && (Model.Checkers.IsUInt((string)values[10]))
-                    && (Model.Checkers.IsUInt((string)values[11]))
-                    && (Model.Checkers.IsUInt((string)values[12]))
-                    && (Model.Checkers.IsUInt((string)values[13]))
-                    && (Model.Checkers.IsUInt((string)values[14]));
+                    return ValidateValues(obj);
                 });
             }
         }
@@ -111,11 +91,78 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
+                    Demand demand = GetDemand(parameter);
+                    demand.ID = SelectedDemand.ID;
+                    Model.Model.Save(demand);
 
-                }, (obj) => false) ;
+
+                    Demands.Remove(SelectedDemand);
+                    Demands.Insert(0, demand);
+                    SelectedDemand = Demands[0];
+                }, (obj) =>
+                {
+                    if(SelectedDemand != null)
+                    {
+                        return ValidateValues(obj);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }) ;
             }
         }
-
+        private bool ValidateValues(object parameter)
+        {
+            var values = (object[])parameter;
+            if(
+            ((Client)values[0] != null)
+            && ((Agent)values[1] != null)
+            && (values[6] != null)
+            && (Model.Checkers.IsUInt((string)values[2]))
+            && (Model.Checkers.IsUInt((string)values[3]))
+            && (Model.Checkers.IsDouble((string)values[4]))
+            && (Model.Checkers.IsDouble((string)values[5]))
+            && (Model.Checkers.IsUInt((string)values[7]))
+            && (Model.Checkers.IsUInt((string)values[8]))
+            && (Model.Checkers.IsUInt((string)values[9]))
+            && (Model.Checkers.IsUInt((string)values[10]))
+            && (Model.Checkers.IsUInt((string)values[11]))
+            && (Model.Checkers.IsUInt((string)values[12]))
+            && (Model.Checkers.IsUInt((string)values[13]))
+            && (Model.Checkers.IsUInt((string)values[14])))
+            {
+                if (!(String.IsNullOrWhiteSpace((string)values[2]) || String.IsNullOrWhiteSpace((string)values[3])))
+                {
+                    if (!(Convert.ToInt32(values[2]) <= Convert.ToInt32(values[3]))) return false;
+                }
+                if (!(String.IsNullOrWhiteSpace((string)values[4]) || String.IsNullOrWhiteSpace((string)values[5])))
+                {
+                    if (!(Convert.ToDouble(values[4]) <= Convert.ToInt32(values[5]))) return false;
+                }
+                if (!(String.IsNullOrWhiteSpace((string)values[7]) || String.IsNullOrWhiteSpace((string)values[8])))
+                {
+                    if (!(Convert.ToInt32(values[7]) <= Convert.ToInt32(values[8]))) return false;
+                }
+                if (!(String.IsNullOrWhiteSpace((string)values[9]) || String.IsNullOrWhiteSpace((string)values[10])))
+                {
+                    if (!(Convert.ToInt32(values[9]) <= Convert.ToInt32(values[10]))) return false;
+                }
+                if (!(String.IsNullOrWhiteSpace((string)values[11]) || String.IsNullOrWhiteSpace((string)values[12])))
+                {
+                    if (!(Convert.ToInt32(values[11]) <= Convert.ToInt32(values[12]))) return false;
+                }
+                if (!(String.IsNullOrWhiteSpace((string)values[13]) || String.IsNullOrWhiteSpace((string)values[14])))
+                {
+                    if (!(Convert.ToInt32(values[13]) <= Convert.ToInt32(values[14]))) return false;
+                }
+                return true;
+            }   
+            else
+            {
+                return false;
+            }
+        }
         private Demand GetDemand(object parameter)
         {
             //TODO: Проверки на добавление
