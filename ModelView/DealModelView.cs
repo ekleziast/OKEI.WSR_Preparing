@@ -20,35 +20,35 @@ namespace esoft.ModelView
                 selectedDeal = value;
                 if(selectedDeal != null)
                 {
-                    SelectedOfferDeal = selectedDeal.Offer;
-                    SelectedDemandDeal = selectedDeal.Demand;
+                    SelectedDealOffer = selectedDeal.Offer;
+                    SelectedDealDemand = selectedDeal.Demand;
                 }
                 OnPropertyChanged("SelectedDeal");
             }
         }
-        private Demand selectedDemandDeal;
-        public Demand SelectedDemandDeal
+        private Demand selectedDealDemand;
+        public Demand SelectedDealDemand
         {
-            get => selectedDemandDeal;
+            get => selectedDealDemand;
             set {
-                selectedDemandDeal = value;
-                if (selectedDemandDeal != null)
+                selectedDealDemand = value;
+                if (selectedDealDemand != null)
                 {
-                    OffersInDeal = GetFilteredOffers(SelectedDemandDeal);
+                    OffersInDeal = GetFilteredOffers(SelectedDealDemand);
                 }
-                OnPropertyChanged("SelectedDemandDeal");
+                OnPropertyChanged("SelectedDealDemand");
             }
         }
 
-        private Offer selectedOfferDeal;
-        public Offer SelectedOfferDeal
+        private Offer selectedDealOffer;
+        public Offer SelectedDealOffer
         {
-            get => selectedOfferDeal;
-            set { selectedOfferDeal = value; OnPropertyChanged("SelectedOfferDeal"); }
+            get => selectedDealOffer;
+            set { selectedDealOffer = value; OnPropertyChanged("SelectedDealOffer"); }
         }
         public ObservableCollection<Deal> Deals { get; set; }
-        public ObservableCollection<Offer> OffersInDeal { get; set; }
         public ObservableCollection<Demand> DemandsInDeal { get; set; }
+        public ObservableCollection<Offer> OffersInDeal { get; set; }
 
         public DealModelView()
         {
@@ -94,7 +94,7 @@ namespace esoft.ModelView
             ObservableCollection<Offer> offers = new ObservableCollection<Offer> { };
             using(Context db = new Context())
             {
-                var result = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted != true && IsOfferMatchConditions(demand, o));
+                var result = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted && IsOfferMatchConditions(demand, o));
                 foreach(var r in result)
                 {
                     offers.Add(r);
@@ -108,7 +108,7 @@ namespace esoft.ModelView
             bool result = true;
 
             if(offer.Estate.EstateTypeID != demand.EstateTypeID) { result = false; return result; }
-
+            
             if (demand.DemandFilter.MinPrice != null) { result = offer.Price >= demand.DemandFilter.MinPrice; }
             if (demand.DemandFilter.MaxPrice != null) { result = result && (offer.Price <= demand.DemandFilter.MaxPrice); }
 
@@ -152,7 +152,7 @@ namespace esoft.ModelView
                     case 2:
                         Land land = db.Lands.Where(o => offer.EstateID == o.ID).FirstOrDefault();
                         break;
-            }
+                }
             }
             return result;
         }

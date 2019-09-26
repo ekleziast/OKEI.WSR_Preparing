@@ -12,11 +12,15 @@ namespace esoft.View
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new {
-                agent = new AgentModelView(), client = new ClientModelView(),
+            DataContext = new
+            {
+                agent = new AgentModelView(),
+                client = new ClientModelView(),
                 estate = new EstateModelView(),
-                offer = new OfferModelView(), demand = new DemandModelView(),
-                deal = new DealModelView()};
+                offer = new OfferModelView(),
+                demand = new DemandModelView(),
+                deal = new DealModelView()
+            };
         }
     }
 }

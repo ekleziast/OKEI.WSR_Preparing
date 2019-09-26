@@ -728,10 +728,11 @@
                                                     <StackPanel>
                                                         <TextBlock>
                                                             <TextBlock.Text>
-                                                                <MultiBinding StringFormat="{}{0} {1} {2} ">
-                                                                    <Binding Path="Client.FirstName"/>
-                                                                    <Binding Path="Client.MiddleName"/>
-                                                                    <Binding Path="Client.LastName"/>
+                                                                <MultiBinding StringFormat="{}г. {0},  ул. {1}, д. {2}, кв. {3}">
+                                                                    <Binding Path="Estate.City"/>
+                                                                    <Binding Path="Estate.Street"/>
+                                                                    <Binding Path="Estate.HouseNumber"/>
+                                                                    <Binding Path="Estate.ApartmentNumber"/>
                                                                 </MultiBinding>
                                                             </TextBlock.Text>
                                                         </TextBlock>
@@ -741,7 +742,7 @@
                                         </ComboBox>
                                     </StackPanel>
                                     <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
-                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedOffer}"/>
+                                        <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedDeal}"/>
                                         <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
                                             <Button.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource createConverter}">
