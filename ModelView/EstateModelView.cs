@@ -99,7 +99,7 @@ namespace esoft.ModelView
                 {
                     Estate estate = GetEstate(parameter);
                     estate.ID = SelectedEstate.ID;
-                    Model.Model.Save(estate);
+                    Model.Model.ReplaceEstate(SelectedEstate, estate);
                     Model.Model.UpdateCollections();
                     AcceptFilter(filterString, typeFilter);
                 }, (obj) => {
@@ -194,7 +194,7 @@ namespace esoft.ModelView
                     int? floors = null;
                     int? roomsHouse = null;
                     if (String.IsNullOrWhiteSpace((string)values[10]) != true) {
-                    floors = Convert.ToInt32(values[10]);
+                        floors = Convert.ToInt32(values[10]);
                     }
                     if (String.IsNullOrWhiteSpace((string)values[11]) != true)
                     {
@@ -211,7 +211,7 @@ namespace esoft.ModelView
                         Area = area,
                         Floors = floors,
                         RoomsHouse = roomsHouse,
-                        EstateTypeID = 1
+                        EstateTypeID = 1,
                     };
                     break;
                 case 2:

@@ -1,4 +1,5 @@
-﻿using esoft.ModelView;
+﻿using esoft.Entity;
+using esoft.ModelView;
 using System;
 
 namespace esoft.Model
@@ -60,6 +61,25 @@ namespace esoft.Model
                     db.SaveChanges();
                 }
                 return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+        }
+        public static bool ReplaceEstate(Estate oldObj, Estate obj)
+        {
+            try
+            {
+                using (Context db = new Context())
+                {
+                    db.Entry(oldObj).State = System.Data.Entity.EntityState.Deleted;
+                    db.Entry(obj).State = System.Data.Entity.EntityState.Added;
+                    db.SaveChanges();
+                }
+                return true;
+
             }
             catch (Exception ex)
             {

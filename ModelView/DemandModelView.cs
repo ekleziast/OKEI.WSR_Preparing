@@ -75,7 +75,6 @@ namespace esoft.ModelView
                     Demand demand = GetDemand(parameter);
                     demand.ID = SelectedDemand.ID;
                     demand.DemandFilter.ID = SelectedDemand.DemandFilter.ID;
-                    demand.DemandFilterID = demand.DemandFilter.ID;
                     Model.Model.Save(demand);
                     Model.Model.UpdateCollections();
                 }, (obj) =>
@@ -247,7 +246,7 @@ namespace esoft.ModelView
                 Client = client, ClientID = client.ID,
                 Agent = agent, AgentID = agent.ID,
                 EstateTypeID = typeId,
-                DemandFilter = demandFilter, DemandFilterID = demandFilter.ID
+                DemandFilter = demandFilter
             };
             return demand;
         }
