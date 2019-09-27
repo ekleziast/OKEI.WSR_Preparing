@@ -12,8 +12,8 @@ namespace esoft.ModelView
 {
     class DemandModelView : INotifyPropertyChanged
     {
-        public ObservableCollection<Client> Clients { get; set; }
-        public ObservableCollection<Agent> Agents { get; set; }
+        public static ObservableCollection<Client> Clients { get; set; }
+        public static ObservableCollection<Agent> Agents { get; set; }
         private Client selectedClientDemand;
         private Agent selectedAgentDemand;
 
@@ -32,33 +32,14 @@ namespace esoft.ModelView
                 }
                 OnPropertyChanged("SelectedDemand");  }
         }
-        public ObservableCollection<Demand> Demands { get; set; }
+        public static ObservableCollection<Demand> Demands { get; set; }
 
         public DemandModelView()
         {
-            using(Context db = new Context())
-            {
-                Agents = new ObservableCollection<Agent> { };
-                Clients = new ObservableCollection<Client> { };
-                Demands = new ObservableCollection<Demand> { };
-                var resultClients = db.Clients.Where(c => !c.isDeleted);
-                foreach (var c in resultClients)
-                {
-                    Clients.Add(c);
-                }
-
-                var resultAgents = db.Agents.Where(c => !c.isDeleted);
-                foreach (var c in resultAgents)
-                {
-                    Agents.Add(c);
-                }
-
-                var result = db.Demands.Include("DemandFilter").Include("Agent").Include("Client").Where(e => !e.isDeleted && !e.isCompleted);
-                foreach (var r in result)
-                {
-                    Demands.Add(r);
-                }
-            }
+            Agents = new ObservableCollection<Agent> { };
+            Clients = new ObservableCollection<Client> { };
+            Demands = new ObservableCollection<Demand> { };
+            CreateCollection();
         }
 
         public RelayCommand RemoveCommand { get
@@ -78,8 +59,7 @@ namespace esoft.ModelView
                 {
                     Demand demand = GetDemand(parameter);
                     Model.Model.Create(demand);
-                    Demands.Insert(0, demand);
-                    SelectedDemand = Demands[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) => {
                     return ValidateValues(obj);
                 });
@@ -94,11 +74,7 @@ namespace esoft.ModelView
                     Demand demand = GetDemand(parameter);
                     demand.ID = SelectedDemand.ID;
                     Model.Model.Save(demand);
-
-
-                    Demands.Remove(SelectedDemand);
-                    Demands.Insert(0, demand);
-                    SelectedDemand = Demands[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) =>
                 {
                     if(SelectedDemand != null)
@@ -272,18 +248,35 @@ namespace esoft.ModelView
             };
             return demand;
         }
-        public static ObservableCollection<Demand> CreateCollection()
+        public static void Update()
         {
-            ObservableCollection<Demand> demands = new ObservableCollection<Demand> { };
+            Clients.Clear();
+            Agents.Clear();
+            Demands.Clear();
+
+            CreateCollection();
+        }
+        public static void CreateCollection()
+        {
             using(Context db = new Context())
             {
+                var resultClients = db.Clients.Where(c => !c.isDeleted);
+                foreach (var c in resultClients)
+                {
+                    Clients.Add(c);
+                }
+
+                var resultAgents = db.Agents.Where(c => !c.isDeleted);
+                foreach (var c in resultAgents)
+                {
+                    Agents.Add(c);
+                }
                 var result = db.Demands.Include("DemandFilter").Include("Agent").Include("Client").Where(e => !e.isDeleted && !e.isCompleted);
                 foreach(var r in result)
                 {
-                    demands.Add(r);
+                    Demands.Add(r);
                 }
             }
-            return demands;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

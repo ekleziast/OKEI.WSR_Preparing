@@ -1,9 +1,19 @@
-﻿using System;
+﻿using esoft.ModelView;
+using System;
 
 namespace esoft.Model
 {
     public static class Model
     {
+        public static void UpdateCollections()
+        {
+            ClientModelView.Update();
+            AgentModelView.Update();
+            EstateModelView.Update();
+            DemandModelView.Update();
+            OfferModelView.Update();
+            DealModelView.Update();
+        }
         public static bool Save(Object obj)
         {
             try

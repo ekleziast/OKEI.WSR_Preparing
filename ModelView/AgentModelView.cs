@@ -11,7 +11,7 @@ namespace esoft.ModelView
     public class AgentModelView : INotifyPropertyChanged
     {
         private Agent selectedAgent;
-        public ObservableCollection<Agent> Agents { get; set; }
+        public static ObservableCollection<Agent> Agents { get; set; }
 
         public Agent SelectedAgent
         {
@@ -25,7 +25,8 @@ namespace esoft.ModelView
 
         public AgentModelView()
         {
-                Agents = CreateCollection();
+            Agents = new ObservableCollection<Agent> { };
+            CreateCollection();
         }
 
         public RelayCommand SaveCommand
@@ -43,9 +44,7 @@ namespace esoft.ModelView
                     Agent agent = new Agent { DealShare = dealShare, FirstName = firstName, MiddleName = middleName, LastName = lastName, ID = SelectedAgent.ID };
                     Model.Model.Save(agent);
 
-                    Agents.Remove(SelectedAgent);
-                    Agents.Insert(0, agent);
-                    SelectedAgent = Agents[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) =>
                 {
                     if (SelectedAgent != null)
@@ -98,8 +97,7 @@ namespace esoft.ModelView
                     Agent agent = new Agent { DealShare=dealShare, FirstName = firstName, MiddleName = middleName, LastName = lastName };
                     Model.Model.Create(agent);
 
-                    Agents.Insert(0, agent);
-                    SelectedAgent = Agents[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) => {
                     var values = (object[])obj;
                     var firstName = (string)values[0];
@@ -118,19 +116,21 @@ namespace esoft.ModelView
             bool isInt = Int32.TryParse(dealShare, out result);
             return isInt ? !(result > 100 || result < 0) : false || String.IsNullOrWhiteSpace(dealShare);
         }
-        public static ObservableCollection<Agent> CreateCollection()
+        public static void Update()
         {
-            ObservableCollection<Agent> agents = new ObservableCollection<Agent> { };
+            Agents.Clear();
+            CreateCollection();
+        }
+        public static void CreateCollection()
+        {
             using (Context db = new Context())
             {
-                agents = new ObservableCollection<Agent> { };
                 var result = db.Agents.Where(c => !c.isDeleted);
                 foreach (var c in result)
                 {
-                    agents.Add(c);
+                    Agents.Add(c);
                 }
             }
-            return agents;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

@@ -30,52 +30,17 @@ namespace esoft.ModelView
             }
         }
         
-
-        public ObservableCollection<Client> Clients { get; set; }
-        public ObservableCollection<Agent> Agents { get; set; }
-        public ObservableCollection<Estate> Estates { get; set; }
-        public ObservableCollection<Offer> Offers { get; set; }
+        public static ObservableCollection<Client> Clients { get; set; }
+        public static ObservableCollection<Agent> Agents { get; set; }
+        public static ObservableCollection<Estate> Estates { get; set; }
+        public static ObservableCollection<Offer> Offers { get; set; }
         public OfferModelView()
         {
-            try
-            {
-                using (Context db = new Context())
-                {
-                    Agents = new ObservableCollection<Agent> { };
-                    Clients = new ObservableCollection<Client> { };
-                    Estates = new ObservableCollection<Estate> { };
-                    Offers = new ObservableCollection<Offer> { };
-
-                    var resultEstates = db.Estates.Where(c => !c.isDeleted);
-                    foreach (var c in resultEstates)
-                    {
-                        Estates.Add(c);
-                    }
-
-                    var resultClients = db.Clients.Where(c => !c.isDeleted);
-                    foreach (var c in resultClients)
-                    {
-                        Clients.Add(c);
-                    }
-
-                    var resultAgents = db.Agents.Where(c => !c.isDeleted);
-                    foreach (var c in resultAgents)
-                    {
-                        Agents.Add(c);
-                    }
-
-                    var result = db.Offers.Where(o => !o.isDeleted && !o.isCompleted);
-                    foreach (var o in result)
-                    {
-                        Offers.Add(o);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return;
-            }
+            Clients = new ObservableCollection<Client> { };
+            Agents = new ObservableCollection<Agent> { };
+            Estates = new ObservableCollection<Estate> { };
+            Offers = new ObservableCollection<Offer> { };
+            CreateCollection();
         }
 
         public RelayCommand AddCommand { get
@@ -90,8 +55,7 @@ namespace esoft.ModelView
 
                     Offer offer = new Offer { Client = client, Agent = agent, Estate = estate, Price = Convert.ToInt32(price) };
                     Model.Model.Create(offer);
-                    Offers.Insert(0, offer);
-                    SelectedOffer = Offers[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) => {
                     var values = (object[])obj;
                     Client client = (Client)values[0];
@@ -122,9 +86,7 @@ namespace esoft.ModelView
                         Price = Convert.ToInt32(price), ID = SelectedOffer.ID };
                     Model.Model.Save(offer);
 
-                    Offers.Remove(SelectedOffer);
-                    Offers.Insert(0, offer);
-                    SelectedOffer = Offers[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) => {
                     if(SelectedOffer != null)
                     {
@@ -156,19 +118,42 @@ namespace esoft.ModelView
                 }, (obj) => SelectedOffer != null);
             }
         }
-        public static ObservableCollection<Offer> CreateCollection()
+        public static void Update()
         {
-            ObservableCollection<Offer> offers = new ObservableCollection<Offer> { };
+            Clients.Clear();
+            Agents.Clear();
+            Estates.Clear();
+            Offers.Clear();
+
+            CreateCollection();
+        }
+        public static void CreateCollection()
+        {
             using (Context db = new Context())
             {
-                offers = new ObservableCollection<Offer> { };
+                var resultEstates = db.Estates.Where(c => !c.isDeleted);
+                foreach (var c in resultEstates)
+                {
+                    Estates.Add(c);
+                }
+
+                var resultClients = db.Clients.Where(c => !c.isDeleted);
+                foreach (var c in resultClients)
+                {
+                    Clients.Add(c);
+                }
+
+                var resultAgents = db.Agents.Where(c => !c.isDeleted);
+                foreach (var c in resultAgents)
+                {
+                    Agents.Add(c);
+                }
                 var result = db.Offers.Include("Client").Include("Agent").Include("Estate").Where(c => !c.isDeleted && !c.isCompleted);
                 foreach (var c in result)
                 {
-                    offers.Add(c);
+                    Offers.Add(c);
                 }
             }
-            return offers;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

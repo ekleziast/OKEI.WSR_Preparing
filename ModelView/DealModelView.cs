@@ -46,48 +46,16 @@ namespace esoft.ModelView
             get => selectedDealOffer;
             set { selectedDealOffer = value; OnPropertyChanged("SelectedDealOffer"); }
         }
-        public ObservableCollection<Deal> Deals { get; set; }
-        public ObservableCollection<Demand> DemandsInDeal { get; set; }
-        public ObservableCollection<Offer> OffersInDeal { get; set; }
+        public static ObservableCollection<Deal> Deals { get; set; }
+        public static ObservableCollection<Demand> DemandsInDeal { get; set; }
+        public static ObservableCollection<Offer> OffersInDeal { get; set; }
 
         public DealModelView()
         {
-            using(Context db = new Context())
-            {
-                OffersInDeal = new ObservableCollection<Offer> { };
-                DemandsInDeal = new ObservableCollection<Demand> { };
-                Deals = new ObservableCollection<Deal> { };
-
-                var resultDemands = db.Demands.Include("Client").Include("Agent").Include("DemandFilter").Where(o => !o.isCompleted && !o.isDeleted);
-                foreach(var r in resultDemands)
-                {
-                    DemandsInDeal.Add(r);
-                }
-                var resultOffers = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted && !o.isDeleted);
-                foreach (var r in resultOffers)
-                {
-                    OffersInDeal.Add(r);
-                }
-                var result = db.Deals.Where(o => !o.isDeleted);
-                foreach (var r in result)
-                {
-                    Deals.Add(r);
-                }
-            }
-        }
-
-        public static ObservableCollection<Deal> CreateCollection()
-        {
-            ObservableCollection<Deal> deals = new ObservableCollection<Deal> { };
-            using (Context db = new Context())
-            {
-                var result = db.Deals.Include("Demand").Include("Offer").Where(o => !o.isDeleted);
-                foreach(var r in result)
-                {
-                    deals.Add(r);
-                }
-            }
-            return deals;
+            OffersInDeal = new ObservableCollection<Offer> { };
+            DemandsInDeal = new ObservableCollection<Demand> { };
+            Deals = new ObservableCollection<Deal> { };
+            CreateCollection();
         }
         private ObservableCollection<Offer> GetFilteredOffers(Demand demand)
         {
@@ -157,6 +125,35 @@ namespace esoft.ModelView
             return result;
         }
 
+        public static void Update()
+        {
+            DemandsInDeal.Clear();
+            OffersInDeal.Clear();
+            Deals.Clear();
+
+            CreateCollection();
+        }
+        public static void CreateCollection()
+        {
+            using (Context db = new Context())
+            {
+                var resultDemands = db.Demands.Include("Client").Include("Agent").Include("DemandFilter").Where(o => !o.isCompleted && !o.isDeleted);
+                foreach (var r in resultDemands)
+                {
+                    DemandsInDeal.Add(r);
+                }
+                var resultOffers = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted && !o.isDeleted);
+                foreach (var r in resultOffers)
+                {
+                    OffersInDeal.Add(r);
+                }
+                var result = db.Deals.Include("Demand").Include("Offer").Where(o => !o.isDeleted);
+                foreach (var r in result)
+                {
+                    Deals.Add(r);
+                }
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

@@ -1,6 +1,7 @@
 ﻿using esoft.Entity;
 using esoft.ModelView;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace esoft.View
 {

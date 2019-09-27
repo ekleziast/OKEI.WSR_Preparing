@@ -14,7 +14,7 @@ namespace esoft.ModelView
     {
         private string filterString = "";
         private int typeFilter = -1;
-        public ObservableCollection<Estate> Estates { get; set; }
+        public static ObservableCollection<Estate> Estates { get; set; }
         public ObservableCollection<Estate> FilteredEstates { get; set; }
         
         private Estate selectedEstate;
@@ -29,8 +29,9 @@ namespace esoft.ModelView
         }
         public EstateModelView()
         {
-            Estates = CreateCollection();
-            FilteredEstates = CreateCollection();
+            Estates = new ObservableCollection<Estate> { };
+            FilteredEstates = new ObservableCollection<Estate> { };
+            CreateCollection();
             AcceptFilter();
         }
         public RelayCommand AcceptFilterCommand
@@ -82,9 +83,8 @@ namespace esoft.ModelView
                     Estate estate = GetEstate(parameter);
                     
                     Model.Model.Create(estate);
-                    Estates.Insert(0, estate);
-                    SelectedEstate = Estates[0];
 
+                    Model.Model.UpdateCollections();
                     AcceptFilter(filterString, typeFilter);
                 }, (obj) => {
                     return ValidateValues(obj);
@@ -100,11 +100,7 @@ namespace esoft.ModelView
                     Estate estate = GetEstate(parameter);
                     estate.ID = SelectedEstate.ID;
                     Model.Model.Save(estate);
-
-                    Estates.Remove(SelectedEstate);
-                    Estates.Insert(0, estate);
-                    SelectedEstate = Estates[0];
-
+                    Model.Model.UpdateCollections();
                     AcceptFilter(filterString, typeFilter);
                 }, (obj) => {
                     if (SelectedEstate != null)
@@ -235,19 +231,21 @@ namespace esoft.ModelView
 
             return estate;
         }
-        public static ObservableCollection<Estate> CreateCollection()
+        public static void Update()
         {
-            ObservableCollection<Estate> estates = new ObservableCollection<Estate> { };
+            Estates.Clear();
+            CreateCollection();
+        }
+        public static void CreateCollection()
+        {
             using (Context db = new Context())
             {
-                estates = new ObservableCollection<Estate> { };
                 var result = db.Estates.Where(c => !c.isDeleted);
                 foreach (var c in result)
                 {
-                    estates.Add(c);
+                    Estates.Add(c);
                 }
             }
-            return estates;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

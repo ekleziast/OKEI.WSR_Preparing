@@ -14,7 +14,7 @@ namespace esoft.ModelView
     {
         
         private Client selectedClient;
-        public ObservableCollection<Client> Clients { get; set; }
+        public static ObservableCollection<Client> Clients { get; set; }
 
         public Client SelectedClient
         {
@@ -28,7 +28,8 @@ namespace esoft.ModelView
 
         public ClientModelView()
         {
-            Clients = CreateCollection();
+            Clients = new ObservableCollection<Client> { };
+            CreateCollection();
         }
         
         public RelayCommand SaveCommand
@@ -45,12 +46,9 @@ namespace esoft.ModelView
                     var phone = (string)values[4];
                     
                     Client client = new Client { Phone = phone, Email = email, FirstName = firstName, MiddleName = middleName, LastName = lastName, ID = SelectedClient.ID };
-                    
+
                     Model.Model.Save(client);
-                    
-                    Clients.Remove(SelectedClient);
-                    Clients.Insert(0, client);
-                    SelectedClient = Clients[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) => 
                 {
                     var values = (object[])obj;
@@ -102,10 +100,8 @@ namespace esoft.ModelView
                     var phone = (string)values[4];
                     
                     Client client = new Client { Phone = phone, Email = email, FirstName = firstName, MiddleName = middleName, LastName = lastName };
-
                     Model.Model.Create(client);
-                    Clients.Insert(0, client);
-                    SelectedClient = Clients[0];
+                    Model.Model.UpdateCollections();
                 }, (obj) => {
                     var values = (object[])obj;
                     var email = (string)values[3];
@@ -135,19 +131,22 @@ namespace esoft.ModelView
             return Regex.Match(phone, @"^(\+[0-9]{11})$").Success;
         }
 
-        public static ObservableCollection<Client> CreateCollection()
+        public static void Update()
         {
-            ObservableCollection<Client> clients = new ObservableCollection<Client> { };
+            Clients.Clear();
+            CreateCollection();
+        }
+
+        public static void CreateCollection()
+        {
             using (Context db = new Context())
             {
-                clients = new ObservableCollection<Client> { };
                 var result = db.Clients.Where(c => !c.isDeleted);
                 foreach (var c in result)
                 {
-                    clients.Add(c);
+                    Clients.Add(c);
                 }
             }
-            return clients;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
