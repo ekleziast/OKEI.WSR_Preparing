@@ -24,7 +24,8 @@ namespace esoft.ModelView
         public Demand SelectedDemand
         {
             get => selectedDemand;
-            set { selectedDemand = value;
+            set {
+                selectedDemand = value;
                 if(selectedDemand != null)
                 {
                     SelectedClientDemand = selectedDemand.Client;

@@ -32,10 +32,6 @@ namespace esoft.ModelView
             get => selectedDealDemand;
             set {
                 selectedDealDemand = value;
-                if (selectedDealDemand != null)
-                {
-                    OffersInDeal = GetFilteredOffers(SelectedDealDemand);
-                }
                 OnPropertyChanged("SelectedDealDemand");
             }
         }
@@ -49,35 +45,34 @@ namespace esoft.ModelView
         public static ObservableCollection<Deal> Deals { get; set; }
         public static ObservableCollection<Demand> DemandsInDeal { get; set; }
         public static ObservableCollection<Offer> OffersInDeal { get; set; }
+        public static ObservableCollection<Offer> FilteredOffers { get; set; }
 
         public DealModelView()
         {
             OffersInDeal = new ObservableCollection<Offer> { };
+            FilteredOffers = new ObservableCollection<Offer> { };
             DemandsInDeal = new ObservableCollection<Demand> { };
             Deals = new ObservableCollection<Deal> { };
             CreateCollection();
         }
-        private ObservableCollection<Offer> GetFilteredOffers(Demand demand)
+        public static void GetFilteredOffers(Demand demand)
         {
-            ObservableCollection<Offer> offers = new ObservableCollection<Offer> { };
-            using(Context db = new Context())
+            FilteredOffers.Clear();
+            var result = OffersInDeal.Where(o => !o.isCompleted && IsOfferMatchConditions(demand, o));
+            foreach(var r in result)
             {
-                var result = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted && IsOfferMatchConditions(demand, o));
-                foreach(var r in result)
-                {
-                    offers.Add(r);
-                }
+                FilteredOffers.Add(r);
             }
-            return offers;
         }
 
-        private bool IsOfferMatchConditions(Demand demand, Offer offer)
+        private static bool IsOfferMatchConditions(Demand demand, Offer offer)
         {
             bool result = true;
 
-            if(offer.Estate.EstateTypeID != demand.EstateTypeID) { result = false; return result; }
+            int type = offer.Estate.EstateTypeID;
+            if (type != demand.EstateTypeID) { result = false; return result; }
             
-            if (demand.DemandFilter.MinPrice != null) { result = offer.Price >= demand.DemandFilter.MinPrice; }
+            if (demand.DemandFilter.MinPrice != null) { result = result && (offer.Price >= demand.DemandFilter.MinPrice); }
             if (demand.DemandFilter.MaxPrice != null) { result = result && (offer.Price <= demand.DemandFilter.MaxPrice); }
 
             if (offer.Estate.Area != null)
@@ -85,7 +80,6 @@ namespace esoft.ModelView
                 if (demand.DemandFilter.MinArea != null) { result = result && (offer.Estate.Area >= demand.DemandFilter.MinArea); }
                 if (demand.DemandFilter.MaxArea != null) { result = result && (offer.Estate.Area <= demand.DemandFilter.MaxArea); }
             }
-            int type = offer.Estate.EstateTypeID;
             using (Context db = new Context())
             {
                 switch (type) {
@@ -129,6 +123,7 @@ namespace esoft.ModelView
         {
             DemandsInDeal.Clear();
             OffersInDeal.Clear();
+            FilteredOffers.Clear();
             Deals.Clear();
 
             CreateCollection();
