@@ -74,6 +74,8 @@ namespace esoft.ModelView
                 {
                     Demand demand = GetDemand(parameter);
                     demand.ID = SelectedDemand.ID;
+                    demand.DemandFilter.ID = SelectedDemand.DemandFilter.ID;
+                    demand.DemandFilterID = demand.DemandFilter.ID;
                     Model.Model.Save(demand);
                     Model.Model.UpdateCollections();
                 }, (obj) =>
@@ -142,7 +144,6 @@ namespace esoft.ModelView
         }
         private Demand GetDemand(object parameter)
         {
-            //TODO: Проверки на добавление
             var values = (object[])parameter;
             Client client = (Client)values[0];
             Agent agent = (Agent)values[1];
@@ -243,9 +244,10 @@ namespace esoft.ModelView
             }
             Demand demand = new Demand
             {
-                Client = client,
-                Agent = agent,
-                EstateTypeID = typeId, DemandFilter = demandFilter
+                Client = client, ClientID = client.ID,
+                Agent = agent, AgentID = agent.ID,
+                EstateTypeID = typeId,
+                DemandFilter = demandFilter, DemandFilterID = demandFilter.ID
             };
             return demand;
         }

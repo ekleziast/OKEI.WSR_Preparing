@@ -112,7 +112,6 @@ namespace esoft.ModelView
                         }
                         break;
                     case 2:
-                        Land land = db.Lands.Where(o => offer.EstateID == o.ID).FirstOrDefault();
                         break;
                 }
             }
