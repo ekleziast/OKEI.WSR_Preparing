@@ -35,7 +35,6 @@ namespace esoft.ModelView
                 selectedEstate = value;
                 if (selectedEstate != null) {
                     estateType = selectedEstate.EstateTypeID;
-                    Console.WriteLine($"estateType: {estateType}");
                 }
                 OnPropertyChanged("SelectedEstate");
             }

@@ -74,8 +74,10 @@ namespace esoft.ModelView
                 {
                     Demand demand = GetDemand(parameter);
                     demand.ID = SelectedDemand.ID;
-                    demand.DemandFilter.ID = SelectedDemand.DemandFilter.ID;
+                    demand.DemandFilterID = SelectedDemand.DemandFilterID;
+                    demand.DemandFilter.ID = SelectedDemand.ID;
                     Model.Model.Save(demand);
+                    Model.Model.Save(demand.DemandFilter);
                     Model.Model.UpdateCollections();
                 }, (obj) =>
                 {

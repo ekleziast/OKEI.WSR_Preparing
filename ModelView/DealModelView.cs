@@ -82,17 +82,14 @@ namespace esoft.ModelView
             }
             using (Context db = new Context())
             {
-                Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 switch (type) {
                     case 0:
                         Apartment apartment = db.Apartments.Where(o => offer.EstateID == o.ID).FirstOrDefault();
-                        Console.WriteLine("1");
                         if (apartment.Floor != null)
                         {
                             if (demand.DemandFilter.MinFloor != null) { result = result && (apartment.Floor >= demand.DemandFilter.MinFloor); }
                             if (demand.DemandFilter.MaxFloor != null) { result = result && (apartment.Floor <= demand.DemandFilter.MaxFloor); }
                         }
-                        Console.WriteLine("2");
                         if (apartment.RoomsApartment != null)
                         {
                             if (demand.DemandFilter.MinRooms != null) { result = result && (apartment.RoomsApartment >= demand.DemandFilter.MinRooms); }
@@ -101,13 +98,11 @@ namespace esoft.ModelView
                         break;
                     case 1:
                         House house = db.Houses.Where(o => offer.EstateID == o.ID).FirstOrDefault();
-                        Console.WriteLine("3");
                         if (house.Floors != null)
                         {
                             if (demand.DemandFilter.MinFloors != null) { result = result && (house.Floors >= demand.DemandFilter.MinFloors); }
                             if (demand.DemandFilter.MaxFloors != null) { result = result && (house.Floors <= demand.DemandFilter.MaxFloors); }
                         }
-                        Console.WriteLine("4");
                         if (house.RoomsHouse != null)
                         {
                             if (demand.DemandFilter.MinRooms != null) { result = result && (house.RoomsHouse >= demand.DemandFilter.MinRooms); }
