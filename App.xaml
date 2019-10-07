@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <local:CreateConverter x:Key="createConverter"/>
+            <local:BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

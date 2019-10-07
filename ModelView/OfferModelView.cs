@@ -53,7 +53,7 @@ namespace esoft.ModelView
                     Estate estate = (Estate)values[2];
                     var price = (string)values[3];
 
-                    Offer offer = new Offer { Client = client, Agent = agent, Estate = estate, Price = Convert.ToInt32(price) };
+                    Offer offer = new Offer { ClientID = client.ID, AgentID = agent.ID, EstateID = estate.ID, Price = Convert.ToInt32(price) };
                     Model.Model.Create(offer);
                     Model.Model.UpdateCollections();
                 }, (obj) => {

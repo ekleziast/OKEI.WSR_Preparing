@@ -194,6 +194,7 @@
                                                                         </MultiBinding>
                                                                     </TextBlock.Text>
                                                                 </TextBlock>
+                                                                <TextBlock Text="{Binding Path=ID}"/>
                                                             </StackPanel>
                                                         </Border>
                                                     </DataTemplate>
@@ -263,29 +264,33 @@
                                             </StackPanel>
                                         </ScrollViewer>
                                     </StackPanel>
-                                    <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
+                                    <DockPanel Grid.Column="1" Grid.Row="1" >
+                                        <DockPanel HorizontalAlignment="Left" Width="250" VerticalAlignment="Center">
+                                            <TextBlock Text="Нельзя сохранить этот объект недвижимости (изменен тип)" TextWrapping="Wrap" Visibility="{Binding Path=IsTypeCorrect, Converter={StaticResource BoolToVisConverter}}" Foreground="Red" HorizontalAlignment="Center" FontSize="16" FontFamily="{StaticResource RobotoRegular}"/>
+                                        </DockPanel>
+                                        <DockPanel HorizontalAlignment="Right">
                                             <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedEstate}"/>
                                             <Button Template="{StaticResource StandartButton}" Content="Сохранить" Command="{Binding Path=SaveCommand}">
                                                 <Button.CommandParameter>
                                                     <MultiBinding Converter="{StaticResource createConverter}">
-                                                    <Binding ElementName="EstateCityTB" Path="Text"/>
-                                                    <Binding ElementName="EstateStreetTB" Path="Text"/>
-                                                    <Binding ElementName="EstateNumberTB" Path="Text"/>
-                                                    <Binding ElementName="EstateApartmentTB" Path="Text"/>
+                                                        <Binding ElementName="EstateCityTB" Path="Text"/>
+                                                        <Binding ElementName="EstateStreetTB" Path="Text"/>
+                                                        <Binding ElementName="EstateNumberTB" Path="Text"/>
+                                                        <Binding ElementName="EstateApartmentTB" Path="Text"/>
 
-                                                    <Binding ElementName="EstateLatitudeTB" Path="Text"/>
-                                                    <Binding ElementName="EstateLongitudeTB" Path="Text"/>
+                                                        <Binding ElementName="EstateLatitudeTB" Path="Text"/>
+                                                        <Binding ElementName="EstateLongitudeTB" Path="Text"/>
 
-                                                    <Binding ElementName="EstateAreaTB" Path="Text"/>
+                                                        <Binding ElementName="EstateAreaTB" Path="Text"/>
 
-                                                    <Binding ElementName="TypesOfEstate" Path="SelectedIndex"/>
+                                                        <Binding ElementName="TypesOfEstate" Path="SelectedIndex"/>
 
-                                                    <Binding ElementName="ApartmentFloorTB" Path="Text"/>
-                                                    <Binding ElementName="ApartmentRoomsTB" Path="Text"/>
+                                                        <Binding ElementName="ApartmentFloorTB" Path="Text"/>
+                                                        <Binding ElementName="ApartmentRoomsTB" Path="Text"/>
 
-                                                    <Binding ElementName="HouseFloorsTB" Path="Text"/>
-                                                    <Binding ElementName="HouseRoomsTB" Path="Text"/>
-                                                </MultiBinding>
+                                                        <Binding ElementName="HouseFloorsTB" Path="Text"/>
+                                                        <Binding ElementName="HouseRoomsTB" Path="Text"/>
+                                                    </MultiBinding>
                                                 </Button.CommandParameter>
                                             </Button>
                                             <Button Template="{StaticResource PrimaryButton}" Content="Создать" Command="{Binding Path=AddCommand}">
@@ -308,10 +313,11 @@
 
                                                         <Binding ElementName="HouseFloorsTB" Path="Text"/>
                                                         <Binding ElementName="HouseRoomsTB" Path="Text"/>
-                                                </MultiBinding>
+                                                    </MultiBinding>
                                                 </Button.CommandParameter>
                                             </Button>
                                         </DockPanel>
+                                    </DockPanel>
                                 </Grid>
                             </DockPanel>
                         </TabItem.Content>

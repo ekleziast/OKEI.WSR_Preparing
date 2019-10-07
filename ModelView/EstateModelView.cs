@@ -14,9 +14,18 @@ namespace esoft.ModelView
     {
         private string filterString = "";
         private int typeFilter = -1;
+        private int estateType = 0;
+
         public static ObservableCollection<Estate> Estates { get; set; }
         public ObservableCollection<Estate> FilteredEstates { get; set; }
-        
+
+        private bool isTypeCorrect = true;
+        public bool IsTypeCorrect { get => isTypeCorrect; set
+            {
+                isTypeCorrect = value;
+                OnPropertyChanged("IsTypeCorrect");
+            } }
+
         private Estate selectedEstate;
         public Estate SelectedEstate
         {
@@ -24,6 +33,10 @@ namespace esoft.ModelView
             set
             {
                 selectedEstate = value;
+                if (selectedEstate != null) {
+                    estateType = selectedEstate.EstateTypeID;
+                    Console.WriteLine($"estateType: {estateType}");
+                }
                 OnPropertyChanged("SelectedEstate");
             }
         }
@@ -99,13 +112,16 @@ namespace esoft.ModelView
                 {
                     Estate estate = GetEstate(parameter);
                     estate.ID = SelectedEstate.ID;
-                    Model.Model.ReplaceEstate(SelectedEstate, estate);
+                    Model.Model.Save(estate);
                     Model.Model.UpdateCollections();
                     AcceptFilter(filterString, typeFilter);
                 }, (obj) => {
                     if (SelectedEstate != null)
                     {
-                        return ValidateValues(obj);
+                        int type = Convert.ToInt32(((object[])obj)[7]);
+                        IsTypeCorrect = estateType == type;
+
+                        return ValidateValues(obj) && IsTypeCorrect;
                     }
                     else
                     {

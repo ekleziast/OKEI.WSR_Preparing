@@ -68,24 +68,5 @@ namespace esoft.Model
                 return false;
             }
         }
-        public static bool ReplaceEstate(Estate oldObj, Estate obj)
-        {
-            try
-            {
-                using (Context db = new Context())
-                {
-                    db.Entry(oldObj).State = System.Data.Entity.EntityState.Deleted;
-                    db.Entry(obj).State = System.Data.Entity.EntityState.Added;
-                    db.SaveChanges();
-                }
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return false;
-            }
-        }
     }
 }
