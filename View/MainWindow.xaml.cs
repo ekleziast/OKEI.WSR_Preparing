@@ -30,7 +30,14 @@ namespace esoft.View
             Demand demand = (Demand)((ComboBox)sender).SelectedItem;
             if (demand != null)
             {
-                DealModelView.GetFilteredOffers(demand);
+                if (DealModelView.SelectionChanged)
+                {
+                    DealModelView.SelectionChanged = false;
+                }
+                else
+                {
+                    DealModelView.GetFilteredOffers(demand);
+                }
             }
         }
     }

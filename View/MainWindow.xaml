@@ -746,6 +746,11 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
+                                        <TextBlock FontFamily="{StaticResource RobotoRegular}" FontSize="16" Text="{Binding Path=PriceForSeller, StringFormat=Стоимость услуг для клиента-продавца: {0} руб.}" Margin="0 10 0 5"/>
+                                        <TextBlock FontFamily="{StaticResource RobotoRegular}" FontSize="16" Text="{Binding Path=PriceForBuyer, StringFormat=Стоимость услуг для клиента-покупателя: {0} руб.}" Margin="0 0 0 5"/>
+                                        <TextBlock FontFamily="{StaticResource RobotoRegular}" FontSize="16" Text="{Binding Path=TaxesForSellerAgent, StringFormat=Отчисления риэлтору продавца: {0} руб.}" Margin="0 0 0 5"/>
+                                        <TextBlock FontFamily="{StaticResource RobotoRegular}" FontSize="16" Text="{Binding Path=TaxesForBuyerAgent, StringFormat=Отчисления риэлтору покупателя: {0} руб.}" Margin="0 0 0 5"/>
+                                        <TextBlock FontFamily="{StaticResource RobotoRegular}" FontSize="16" Text="{Binding Path=TaxesForCompany, StringFormat=Отчисления компании: {0} руб.}" Margin="0 0 0 5"/>
                                     </StackPanel>
                                     <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
                                         <Button Template="{StaticResource DangerousButton}" Content="Удалить" Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding SelectedDeal}"/>

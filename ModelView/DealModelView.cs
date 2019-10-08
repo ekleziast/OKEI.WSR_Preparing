@@ -12,6 +12,59 @@ namespace esoft.ModelView
 {
     class DealModelView : INotifyPropertyChanged
     {
+        public static bool SelectionChanged = false;
+
+        private double priceForBuyer = 0;
+        public double PriceForBuyer
+        {
+            get => priceForBuyer;
+            set
+            {
+                priceForBuyer = value;
+                OnPropertyChanged("PriceForBuyer");
+            }
+        }
+        private double priceForSeller = 0;
+        public double PriceForSeller
+        {
+            get => priceForSeller;
+            set
+            {
+                priceForSeller = value;
+                OnPropertyChanged("PriceForSeller");
+            }
+        }
+        private double taxesForBuyerAgent = 0;
+        public double TaxesForBuyerAgent
+        {
+            get => taxesForBuyerAgent;
+            set
+            {
+                taxesForBuyerAgent = value;
+                OnPropertyChanged("TaxesForBuyerAgent");
+            }
+        }
+        private double taxesForSellerAgent = 0;
+        public double TaxesForSellerAgent
+        {
+            get => taxesForSellerAgent;
+            set
+            {
+                taxesForSellerAgent = value;
+                OnPropertyChanged("TaxesForSellerAgent");
+            }
+        }
+        private double taxesForCompany = 0;
+        public double TaxesForCompany
+        {
+            get => taxesForCompany;
+            set
+            {
+                taxesForCompany = value;
+                OnPropertyChanged("TaxesForCompany");
+            }
+        }
+
         private Deal selectedDeal;
         public Deal SelectedDeal
         {
@@ -20,8 +73,16 @@ namespace esoft.ModelView
                 selectedDeal = value;
                 if(selectedDeal != null)
                 {
+                    GetFilteredOffers(SelectedDeal.Demand);
+                    SelectionChanged = true;
+
                     SelectedDealOffer = selectedDeal.Offer;
                     SelectedDealDemand = selectedDeal.Demand;
+
+                    if (selectedDealOffer != null && selectedDealDemand != null)
+                    {
+                        SetPrices(selectedDealOffer, selectedDealDemand);
+                    }
                 }
                 OnPropertyChanged("SelectedDeal");
             }
@@ -40,7 +101,11 @@ namespace esoft.ModelView
         public Offer SelectedDealOffer
         {
             get => selectedDealOffer;
-            set { selectedDealOffer = value; OnPropertyChanged("SelectedDealOffer"); }
+            set
+            {
+                selectedDealOffer = value;
+                OnPropertyChanged("SelectedDealOffer");
+            }
         }
         public static ObservableCollection<Deal> Deals { get; set; }
         public static ObservableCollection<Demand> DemandsInDeal { get; set; }
@@ -63,6 +128,73 @@ namespace esoft.ModelView
             {
                 FilteredOffers.Add(r);
             }
+        }
+
+        public RelayCommand AddCommand
+        {
+            get
+            {
+                return new RelayCommand(delegate (object parameter)
+                {
+                    Deal deal = GetDeal(parameter);
+                    Model.Model.Create(deal);
+                    Model.Model.UpdateCollections();
+                }, (obj) => {
+                    var values = (object[])obj;
+                    Offer offer = (Offer)values[0];
+                    Demand demand = (Demand)values[1];
+                    return offer != null && demand != null;
+                });
+            }
+        }
+
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                return new RelayCommand(delegate (object parameter)
+                {
+                    Deal deal = GetDeal(parameter);
+                    deal.ID = SelectedDeal.ID;
+                    Model.Model.Save(deal);
+                    Model.Model.UpdateCollections();
+                }, (obj) => {
+                    if (SelectedDeal != null)
+                    {
+                        var values = (object[])obj;
+                        Offer offer = (Offer)values[0];
+                        Demand demand = (Demand)values[1];
+
+                        return offer != null && demand != null;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+            }
+        }
+        
+        public RelayCommand RemoveCommand
+        {
+            get
+            {
+                return new RelayCommand(delegate (object parameter)
+                {
+                    Deal deal = parameter as Deal;
+                    Model.Model.Remove(deal);
+                    Model.Model.UpdateCollections();
+                }, (obj) => SelectedDeal != null);
+            }
+        }
+        private Deal GetDeal(object parameter)
+        {
+            var values = (object[])parameter;
+            Offer offer = (Offer) values[0];
+            Demand demand = (Demand)values[1];
+
+            Deal deal = new Deal { OfferID = offer.ID, DemandID = demand.ID };
+            return deal;
         }
 
         private static bool IsOfferMatchConditions(Demand demand, Offer offer)
@@ -114,6 +246,50 @@ namespace esoft.ModelView
                 }
             }
             return result;
+        }
+
+        private void SetPrices(Offer offer, Demand demand)
+        {
+            PriceForBuyer = GetPriceForBuyer(offer);
+            PriceForSeller = GetPriceForSeller(offer);
+            TaxesForBuyerAgent = GetTaxesForAgent(PriceForBuyer, demand.Agent.DealShare);
+            TaxesForSellerAgent = GetTaxesForAgent(PriceForSeller, offer.Agent.DealShare);
+            TaxesForCompany = GetTaxesForCompany(PriceForBuyer + PriceForSeller);
+        }
+        private double GetTaxesForAgent(double price, int dealShare)
+        {
+            double taxes = 0;
+            taxes = price * dealShare * 0.01;
+            return taxes;
+        }
+        private double GetTaxesForCompany(double price)
+        {
+            double taxes = 0;
+            taxes = price - (TaxesForBuyerAgent + TaxesForSellerAgent);
+            return taxes;
+        }
+        private double GetPriceForBuyer(Offer offer)
+        {
+            double price = 0;
+            price = offer.Price * 0.03;
+            return price;
+        }
+        private double GetPriceForSeller(Offer offer)
+        {
+            double price = 0;
+            switch (offer.Estate.EstateTypeID)
+            {
+                case 0:
+                    price = 36000 + 0.01 * offer.Price;
+                    break;
+                case 1:
+                    price = 30000 + 0.01 * offer.Price;
+                    break;
+                case 2:
+                    price = 30000 + 0.02 * offer.Price;
+                    break;
+            }
+            return price;
         }
 
         public static void Update()
