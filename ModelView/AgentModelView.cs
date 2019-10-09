@@ -35,13 +35,8 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
-                    var values = (object[])parameter;
-                    var firstName = (string)values[0];
-                    var middleName = (string)values[1];
-                    var lastName = (string)values[2];
-                    var dealShare = String.IsNullOrEmpty((string)values[3]) ? 45 : Convert.ToInt32(values[3]);
-
-                    Agent agent = new Agent { DealShare = dealShare, FirstName = firstName, MiddleName = middleName, LastName = lastName, ID = SelectedAgent.ID };
+                    Agent agent = GetAgent(parameter);
+                    agent.ID = SelectedAgent.ID;
                     Model.Model.Save(agent);
 
                     Model.Model.UpdateCollections();
@@ -49,14 +44,7 @@ namespace esoft.ModelView
                 {
                     if (SelectedAgent != null)
                     {
-                        var values = (object[])obj;
-                        var firstName = (string)values[0];
-                        var middleName = (string)values[1];
-                        var lastName = (string)values[2];
-                        var dealShare = (string)values[3];
-                        return !(String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(middleName)
-                        || String.IsNullOrWhiteSpace(lastName))
-                        && IsDealShare(dealShare);
+                        return IsCorrect(obj);
                     }
                     else
                     {
@@ -78,7 +66,7 @@ namespace esoft.ModelView
                         Model.Model.Remove(agent);
                         Agents.Remove(agent);
                     }
-                }, (obj) => SelectedAgent != null);
+                }, (obj) => SelectedAgent != null ? !IsAgentInAction(SelectedAgent) : false);
             }
         }
         
@@ -88,33 +76,54 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
-                    var values = (object[])parameter;
-                    var firstName = (string)values[0];
-                    var middleName = (string)values[1];
-                    var lastName = (string)values[2];
-                    var dealShare = String.IsNullOrWhiteSpace((string)values[3]) ? 45 : Convert.ToInt32(values[3]);
-                    
-                    Agent agent = new Agent { DealShare=dealShare, FirstName = firstName, MiddleName = middleName, LastName = lastName };
+                    Agent agent = GetAgent(parameter);
                     Model.Model.Create(agent);
 
                     Model.Model.UpdateCollections();
                 }, (obj) => {
-                    var values = (object[])obj;
-                    var firstName = (string)values[0];
-                    var middleName = (string)values[1];
-                    var lastName = (string)values[2];
-                    var dealShare = (string)values[3];
-                    return !(String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(middleName)
-                        || String.IsNullOrWhiteSpace(lastName))
-                        && IsDealShare(dealShare);
+                    return IsCorrect(obj);
                 });
             }
+        }
+        private bool IsCorrect(object obj)
+        {
+            var values = (object[])obj;
+            var firstName = (string)values[0];
+            var middleName = (string)values[1];
+            var lastName = (string)values[2];
+            var dealShare = (string)values[3];
+            return !(String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(middleName)
+                || String.IsNullOrWhiteSpace(lastName))
+                && IsDealShare(dealShare);
+        }
+        private static Agent GetAgent(object parameter)
+        {
+            var values = (object[])parameter;
+            var firstName = (string)values[0];
+            var middleName = (string)values[1];
+            var lastName = (string)values[2];
+            var dealShare = String.IsNullOrWhiteSpace((string)values[3]) ? 45 : Convert.ToInt32(values[3]);
+
+            Agent agent = new Agent { DealShare = dealShare, FirstName = firstName, MiddleName = middleName, LastName = lastName };
+            return agent;
         }
         private bool IsDealShare(string dealShare)
         {
             int result;
             bool isInt = Int32.TryParse(dealShare, out result);
             return isInt ? !(result > 100 || result < 0) : false || String.IsNullOrWhiteSpace(dealShare);
+        }
+        public static bool IsAgentInAction(Agent agent)
+        {
+            bool result = false;
+            using (Context db = new Context())
+            {
+                var offer = db.Offers.Where(o => o.AgentID == agent.ID && !o.isDeleted).Any();
+                var demand = db.Demands.Where(o => o.AgentID == agent.ID && !o.isDeleted).Any();
+
+                result = offer || demand;
+            }
+            return result;
         }
         public static void Update()
         {

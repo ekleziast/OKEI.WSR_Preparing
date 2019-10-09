@@ -64,7 +64,6 @@ namespace esoft.ModelView
                 OnPropertyChanged("TaxesForCompany");
             }
         }
-
         private Deal selectedDeal;
         public Deal SelectedDeal
         {
@@ -104,6 +103,7 @@ namespace esoft.ModelView
             set
             {
                 selectedDealOffer = value;
+                Console.WriteLine("hello");
                 OnPropertyChanged("SelectedDealOffer");
             }
         }
@@ -123,7 +123,7 @@ namespace esoft.ModelView
         public static void GetFilteredOffers(Demand demand)
         {
             FilteredOffers.Clear();
-            var result = OffersInDeal.Where(o => !o.isCompleted && IsOfferMatchConditions(demand, o));
+            var result = OffersInDeal.Where(o => IsOfferMatchConditions(demand, o));
             foreach(var r in result)
             {
                 FilteredOffers.Add(r);
@@ -140,10 +140,7 @@ namespace esoft.ModelView
                     Model.Model.Create(deal);
                     Model.Model.UpdateCollections();
                 }, (obj) => {
-                    var values = (object[])obj;
-                    Offer offer = (Offer)values[0];
-                    Demand demand = (Demand)values[1];
-                    return offer != null && demand != null;
+                    return IsCorrect(obj);
                 });
             }
         }
@@ -161,11 +158,7 @@ namespace esoft.ModelView
                 }, (obj) => {
                     if (SelectedDeal != null)
                     {
-                        var values = (object[])obj;
-                        Offer offer = (Offer)values[0];
-                        Demand demand = (Demand)values[1];
-
-                        return offer != null && demand != null;
+                        return IsCorrect(obj);
                     }
                     else
                     {
@@ -174,7 +167,6 @@ namespace esoft.ModelView
                 });
             }
         }
-        
         public RelayCommand RemoveCommand
         {
             get
@@ -186,6 +178,21 @@ namespace esoft.ModelView
                     Model.Model.UpdateCollections();
                 }, (obj) => SelectedDeal != null);
             }
+        }
+
+        private static bool IsCorrect(object obj)
+        {
+            var values = (object[])obj;
+            Offer offer = (Offer)values[0];
+            Demand demand = (Demand)values[1];
+
+            return offer != null && demand != null && !IsOfferAndDemandUsed(offer, demand);
+        }
+        public static bool IsOfferAndDemandUsed(Offer offer, Demand demand)
+        {
+            bool result = false;
+            result = OfferModelView.IsOfferInAction(offer) || DemandModelView.IsDemandInAction(demand);
+            return result;
         }
         private Deal GetDeal(object parameter)
         {
@@ -305,20 +312,26 @@ namespace esoft.ModelView
         {
             using (Context db = new Context())
             {
-                var resultDemands = db.Demands.Include("Client").Include("Agent").Include("DemandFilter").Where(o => !o.isCompleted && !o.isDeleted);
-                foreach (var r in resultDemands)
-                {
-                    DemandsInDeal.Add(r);
-                }
-                var resultOffers = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isCompleted && !o.isDeleted);
-                foreach (var r in resultOffers)
-                {
-                    OffersInDeal.Add(r);
-                }
                 var result = db.Deals.Include("Demand").Include("Offer").Where(o => !o.isDeleted);
                 foreach (var r in result)
                 {
                     Deals.Add(r);
+                }
+
+                //var resultDemands = db.Demands.Include("Client").Include("Agent").Include("DemandFilter")
+                //    .Where(o => !o.isDeleted && db.Deals.Where(d => d.DemandID == o.ID).Any() == false);
+                var resultDemands = db.Demands.Include("Client").Include("Agent").Include("DemandFilter").Where(o => !o.isDeleted);
+                foreach (var r in resultDemands)
+                {
+                    DemandsInDeal.Add(r);
+                }
+
+                //var resultOffers = db.Offers.Include("Estate").Include("Client").Include("Agent")
+                //    .Where(o => !o.isDeleted && db.Deals.Where(d => d.OfferID == o.ID).Any() == false);
+                var resultOffers = db.Offers.Include("Estate").Include("Client").Include("Agent").Where(o => !o.isDeleted);
+                foreach (var r in resultOffers)
+                {
+                    OffersInDeal.Add(r);
                 }
             }
         }

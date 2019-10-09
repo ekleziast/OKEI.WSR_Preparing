@@ -49,3 +49,4 @@ C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.IntToDoubleI
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.isDeletedDeal.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.notNullEstateType.resources
 C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.stringToInt.resources
+C:\Users\admin\source\repos\wsr1.2\esoft\obj\Debug\esoft.Migrations.RemovedIsCompletedInOfferAndDemand.resources

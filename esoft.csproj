@@ -152,6 +152,10 @@
     <Compile Include="Migrations\201909251135189_stringToInt.Designer.cs">
       <DependentUpon>201909251135189_stringToInt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910090901155_RemovedIsCompletedInOfferAndDemand.cs" />
+    <Compile Include="Migrations\201910090901155_RemovedIsCompletedInOfferAndDemand.Designer.cs">
+      <DependentUpon>201910090901155_RemovedIsCompletedInOfferAndDemand.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelView\DealModelView.cs" />
     <Compile Include="ModelView\DemandModelView.cs" />
@@ -289,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909251135189_stringToInt.resx">
       <DependentUpon>201909251135189_stringToInt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910090901155_RemovedIsCompletedInOfferAndDemand.resx">
+      <DependentUpon>201910090901155_RemovedIsCompletedInOfferAndDemand.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

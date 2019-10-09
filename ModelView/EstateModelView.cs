@@ -129,6 +129,20 @@ namespace esoft.ModelView
                 });
             }
         }
+        public RelayCommand RemoveCommand
+        {
+            get
+            {
+                return new RelayCommand(delegate (object parameter)
+                {
+                    Estate estate = parameter as Estate;
+                    Model.Model.Remove(estate);
+                    Estates.Remove(estate);
+                    AcceptFilter(filterString, typeFilter);
+                }, (obj) => SelectedEstate != null ? !IsEstateInAction(SelectedEstate) : false);
+            }
+        }
+
         private bool ValidateValues(object parameter)
         {
             var values = (object[])parameter;
@@ -144,18 +158,14 @@ namespace esoft.ModelView
             && Model.Checkers.IsUInt((string)values[10])
             && Model.Checkers.IsUInt((string)values[11]);
         }
-        public RelayCommand RemoveCommand
+        public static bool IsEstateInAction(Estate estate)
         {
-            get
+            bool result = false;
+            using (Context db = new Context())
             {
-                return new RelayCommand(delegate (object parameter)
-                {
-                    Estate estate = parameter as Estate;
-                    Model.Model.Remove(estate);
-                    Estates.Remove(estate);
-                    AcceptFilter(filterString, typeFilter);
-                }, (obj) => SelectedEstate != null);
+                result = db.Offers.Where(o => o.EstateID == estate.ID && !o.isDeleted).Any();
             }
+            return result;
         }
         private Estate GetEstate(object parameter)
         {

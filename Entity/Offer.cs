@@ -24,8 +24,7 @@ namespace esoft.Entity
         [ForeignKey("Agent")]
         public int AgentID { get; set; }
         public virtual Agent Agent { get; set; }
-
-        public bool isCompleted { get; set; }
+        
         public bool isDeleted { get; set; }
     }
 }

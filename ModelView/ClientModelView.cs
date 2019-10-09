@@ -38,14 +38,8 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
-                    var values = (object[])parameter;
-                    var firstName = (string)values[0];
-                    var middleName = (string)values[1];
-                    var lastName = (string)values[2];
-                    var email = (string)values[3];
-                    var phone = (string)values[4];
-                    
-                    Client client = new Client { Phone = phone, Email = email, FirstName = firstName, MiddleName = middleName, LastName = lastName, ID = SelectedClient.ID };
+                    Client client = GetClient(parameter);
+                    client.ID = SelectedClient.ID;
 
                     Model.Model.Save(client);
                     Model.Model.UpdateCollections();
@@ -54,13 +48,7 @@ namespace esoft.ModelView
                     var values = (object[])obj;
                     if (SelectedClient != null)
                     {
-                        var email = (string)values[3];
-                        var phone = (string)values[4];
-                        if (!String.IsNullOrEmpty((string)values[3]) && !String.IsNullOrEmpty((string)values[4]))
-                        {
-                            return (IsValidEmail(email) && IsValidPhone(phone));
-                        }
-                        return !String.IsNullOrEmpty(email) && IsValidEmail(email) || !String.IsNullOrEmpty(phone) && IsValidPhone(phone);
+                        return IsCorrect(obj);
                     }
                     else
                     {
@@ -82,7 +70,9 @@ namespace esoft.ModelView
                         Model.Model.Remove(client);
                         Clients.Remove(client);
                     }
-                }, (obj) => SelectedClient != null);
+                }, (obj) => {
+                    return SelectedClient != null ? !IsClientInAction(SelectedClient) : false;
+                });
             }
         }
         
@@ -92,31 +82,28 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
-                    var values = (object[])parameter;
-                    var firstName = (string)values[0];
-                    var middleName = (string)values[1];
-                    var lastName = (string)values[2];
-                    var email = (string)values[3];
-                    var phone = (string)values[4];
-                    
-                    Client client = new Client { Phone = phone, Email = email, FirstName = firstName, MiddleName = middleName, LastName = lastName };
+                    Client client = GetClient(parameter);
                     Model.Model.Create(client);
                     Model.Model.UpdateCollections();
                 }, (obj) => {
-                    var values = (object[])obj;
-                    var email = (string)values[3];
-                    var phone = (string)values[4];
-
-                    if (!String.IsNullOrEmpty(email) && !String.IsNullOrEmpty(phone))
-                    {
-                        return (IsValidEmail(email) && IsValidPhone(phone));
-                    }
-                    return !String.IsNullOrEmpty(email) && IsValidEmail(email) || !String.IsNullOrEmpty(phone) && IsValidPhone(phone);
+                    return IsCorrect(obj);
                 });
             }
         }
+        private static Client GetClient(object parameter)
+        {
+            var values = (object[])parameter;
+            var firstName = (string)values[0];
+            var middleName = (string)values[1];
+            var lastName = (string)values[2];
+            var email = (string)values[3];
+            var phone = (string)values[4];
 
-        private bool IsValidEmail(string email)
+            Client client = new Client { Phone = phone, Email = email, FirstName = firstName, MiddleName = middleName, LastName = lastName };
+            return client;
+        }
+
+        private static bool IsValidEmail(string email)
         {
             try
             {
@@ -147,6 +134,31 @@ namespace esoft.ModelView
                     Clients.Add(c);
                 }
             }
+        }
+
+        private bool IsCorrect(object obj)
+        {
+            var values = (object[])obj;
+            var email = (string)values[3];
+            var phone = (string)values[4];
+            if (!String.IsNullOrEmpty((string)values[3]) && !String.IsNullOrEmpty((string)values[4]))
+            {
+                return (IsValidEmail(email) && IsValidPhone(phone));
+            }
+            return !String.IsNullOrEmpty(email) && IsValidEmail(email) || !String.IsNullOrEmpty(phone) && IsValidPhone(phone);
+        }
+
+        public static bool IsClientInAction(Client client)
+        {
+            bool result = false;
+            using(Context db = new Context())
+            {
+                var offer = db.Offers.Where(o => o.ClientID == client.ID && !o.isDeleted).Any();
+                var demand = db.Demands.Where(o => o.ClientID == client.ID && !o.isDeleted).Any();
+
+                result = offer || demand;
+            }
+            return result;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

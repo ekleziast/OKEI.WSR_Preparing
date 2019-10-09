@@ -50,7 +50,7 @@ namespace esoft.ModelView
                     Demand demand = parameter as Demand;
                     Model.Model.Remove(demand);
                     Demands.Remove(demand);
-                }, (obj) => SelectedDemand != null);
+                }, (obj) => SelectedDemand != null ? !IsDemandInAction(SelectedDemand) : false);
             } }
         public RelayCommand AddCommand
         {
@@ -92,6 +92,17 @@ namespace esoft.ModelView
                 }) ;
             }
         }
+
+        public static bool IsDemandInAction(Demand demand)
+        {
+            bool result = false;
+            using (Context db = new Context())
+            {
+                result = db.Deals.Where(o => o.DemandID == demand.ID && !o.isDeleted).Any();
+            }
+            return result;
+        }
+
         private bool ValidateValues(object parameter)
         {
             var values = (object[])parameter;
@@ -275,7 +286,7 @@ namespace esoft.ModelView
                 {
                     Agents.Add(c);
                 }
-                var result = db.Demands.Include("DemandFilter").Include("Agent").Include("Client").Where(e => !e.isDeleted && !e.isCompleted);
+                var result = db.Demands.Include("DemandFilter").Include("Agent").Include("Client").Where(e => !e.isDeleted);
                 foreach(var r in result)
                 {
                     Demands.Add(r);

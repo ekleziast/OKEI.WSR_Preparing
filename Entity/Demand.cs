@@ -25,8 +25,7 @@ namespace esoft.Entity
         public virtual Agent Agent { get; set; }
 
         public int? EstateTypeID { get; set; }
-
-        public bool isCompleted { get; set; }
+        
         public bool isDeleted { get; set; }
     }
 }

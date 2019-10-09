@@ -47,26 +47,11 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
-                    var values = (object[])parameter;
-                    Client client = (Client)values[0];
-                    Agent agent = (Agent)values[1];
-                    Estate estate = (Estate)values[2];
-                    var price = (string)values[3];
-
-                    Offer offer = new Offer { ClientID = client.ID, AgentID = agent.ID, EstateID = estate.ID, Price = Convert.ToInt32(price) };
+                    Offer offer = GetOffer(parameter);
                     Model.Model.Create(offer);
                     Model.Model.UpdateCollections();
                 }, (obj) => {
-                    var values = (object[])obj;
-                    Client client = (Client)values[0];
-                    Agent agent = (Agent)values[1];
-                    Estate estate = (Estate)values[2];
-                    var price = (string)values[3];
-
-                    return (client != null) && (agent != null)
-                    && (estate != null) &&
-                    (!String.IsNullOrWhiteSpace(price) && 
-                    Model.Checkers.IsUInt(price));
+                    return IsCorrect(obj);
                 });
             } }
         public RelayCommand SaveCommand
@@ -75,29 +60,15 @@ namespace esoft.ModelView
             {
                 return new RelayCommand(delegate (object parameter)
                 {
-                    var values = (object[])parameter;
-                    Client client = (Client)values[0];
-                    Agent agent = (Agent)values[1];
-                    Estate estate = (Estate)values[2];
-                    var price = (string)values[3];
-
-                    Offer offer = new Offer { ClientID = client.ID, AgentID = agent.ID, EstateID = estate.ID,
-                        Client = client, Agent = agent, Estate = estate,
-                        Price = Convert.ToInt32(price), ID = SelectedOffer.ID };
+                    Offer offer = GetOffer(parameter);
+                    offer.ID = SelectedOffer.ID;
                     Model.Model.Save(offer);
 
                     Model.Model.UpdateCollections();
                 }, (obj) => {
                     if(SelectedOffer != null)
                     {
-                        var values = (object[])obj;
-                        Client client = (Client)values[0];
-                        Agent agent = (Agent)values[1];
-                        Estate estate = (Estate)values[2];
-                        var price = (string)values[3];
-
-                        return (client != null) && (agent != null) && (estate != null)
-                        && (Model.Checkers.IsUInt(price) && !String.IsNullOrWhiteSpace(price) );
+                        return IsCorrect(obj);
                     }
                     else
                     {
@@ -115,8 +86,39 @@ namespace esoft.ModelView
                     Offer offer = parameter as Offer;
                     Model.Model.Save(offer);
                     Offers.Remove(offer);
-                }, (obj) => SelectedOffer != null);
+                }, (obj) => SelectedOffer != null ? !IsOfferInAction(SelectedOffer) : false);
             }
+        }
+        private bool IsCorrect(object obj)
+        {
+            var values = (object[])obj;
+            Client client = (Client)values[0];
+            Agent agent = (Agent)values[1];
+            Estate estate = (Estate)values[2];
+            var price = (string)values[3];
+
+            return (client != null) && (agent != null) && (estate != null)
+            && (Model.Checkers.IsUInt(price) && !String.IsNullOrWhiteSpace(price));
+        }
+        public static bool IsOfferInAction(Offer offer)
+        {
+            bool result = false;
+            using (Context db = new Context())
+            {
+                result = db.Deals.Where(o => o.OfferID == offer.ID && !o.isDeleted).Any();
+            }
+            return result;
+        }
+        private static Offer GetOffer(object parameter)
+        {
+            var values = (object[])parameter;
+            Client client = (Client)values[0];
+            Agent agent = (Agent)values[1];
+            Estate estate = (Estate)values[2];
+            var price = (string)values[3];
+
+            Offer offer = new Offer { ClientID = client.ID, AgentID = agent.ID, EstateID = estate.ID, Price = Convert.ToInt32(price) };
+            return offer;
         }
         public static void Update()
         {
@@ -148,7 +150,7 @@ namespace esoft.ModelView
                 {
                     Agents.Add(c);
                 }
-                var result = db.Offers.Include("Client").Include("Agent").Include("Estate").Where(c => !c.isDeleted && !c.isCompleted);
+                var result = db.Offers.Include("Client").Include("Agent").Include("Estate").Where(c => !c.isDeleted);
                 foreach (var c in result)
                 {
                     Offers.Add(c);
