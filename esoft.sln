@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "esoft", "esoft.csproj", "{DA15C6C8-E326-401B-B511-A748385A933C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSR_Android", "..\WSR_Android\WSR_Android\WSR_Android\WSR_Android.csproj", "{2D42AB10-D871-4B01-B021-08B246E8B52F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSR_Android.Android", "..\WSR_Android\WSR_Android\WSR_Android.Android\WSR_Android.Android.csproj", "{6D77E8B3-679A-4803-9798-0E8C662AEF44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,16 @@ Global
 		{DA15C6C8-E326-401B-B511-A748385A933C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA15C6C8-E326-401B-B511-A748385A933C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA15C6C8-E326-401B-B511-A748385A933C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D42AB10-D871-4B01-B021-08B246E8B52F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D42AB10-D871-4B01-B021-08B246E8B52F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D42AB10-D871-4B01-B021-08B246E8B52F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D42AB10-D871-4B01-B021-08B246E8B52F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D77E8B3-679A-4803-9798-0E8C662AEF44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D77E8B3-679A-4803-9798-0E8C662AEF44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D77E8B3-679A-4803-9798-0E8C662AEF44}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6D77E8B3-679A-4803-9798-0E8C662AEF44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D77E8B3-679A-4803-9798-0E8C662AEF44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D77E8B3-679A-4803-9798-0E8C662AEF44}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
